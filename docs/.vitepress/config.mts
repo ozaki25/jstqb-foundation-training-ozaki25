@@ -91,7 +91,7 @@ export default withPwa(
                 { text: "lesson02: なぜテストが必要か", link: "/lessons/lesson02/" },
                 { text: "lesson03: テストの7原則", link: "/lessons/lesson03/" },
                 { text: "lesson04: テストプロセス", link: "/lessons/lesson04/" },
-                { text: "lesson05: テストの心理学とチーム", link: "/lessons/lesson05/" },
+                { text: "lesson05: テストに必要なスキルとチーム", link: "/lessons/lesson05/" },
               ],
             },
             {
