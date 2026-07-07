@@ -105,3 +105,24 @@
     max-width: none;
   }
 }
+
+/* ===========================================================================
+ * ダークモードの stateDiagram-v2 でノードラベルが見えなくなる不具合の対策
+ *
+ * vitepress-plugin-mermaid はダークモード時に Mermaid のテーマを強制的に
+ * "dark" に切り替えるが、config.mts の themeVariables（primaryTextColor 等、
+ * ライト背景用の紺色 #1e293b）はそのまま残る。flowchart の nodeLabel は
+ * 影響を受けないが、stateDiagram-v2 は生成 CSS で
+ * `.nodeLabel{color:#1e293b}` を直接ハードコードするため、暗い背景
+ * （ダークテーマの既定ノード色）に紺色の文字が重なりコントラスト比が
+ * 約1.1:1（ほぼ見えない）になる。Mermaid が SVG 内に埋め込む <style> は
+ * ID スコープで詳細度が高いため、!important で上書きして固定の淡色に
+ * する（flowchart が既に使っている色と合わせ、図の種類間で見た目を統一）。
+ * =========================================================================== */
+.dark .mermaid .nodeLabel,
+.dark .mermaid .cluster-label,
+.dark .mermaid .state-title,
+.dark .mermaid .stateLabel text {
+  color: #cccccc !important;
+  fill: #cccccc !important;
+}

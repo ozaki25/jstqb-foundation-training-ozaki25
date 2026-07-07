@@ -253,3 +253,11 @@
 - 編集は付録セクションのみ（本文・事実は不変。本文がキーワード表を参照する記述はgrepでゼロを確認）。分量の看板「15分」はCLAUDE.mdで実態（1小カテゴリ分・目安10〜20分、技法系は長い）に修正。CLAUDE.md・README・add-lesson/review-lesスキルを同期。
 - 検証: 全30レッスンで `## キーワード` 消失・`## 試験のポイント` 3〜4項目を機械確認。check-bold/style/lesson-title・textlint・quiz:validate（186問）・docs:build すべて通過。
 - 学び: 「多い」の本質的な是正は、件数を削るより「用語定義はレッスンに置かない（用語集に一本化）」という構成判断だった。レッスン末尾は短い切り口ボックス1つになり、用語の単一情報源が明確になった。
+
+### Sprint 61: Mermaid図のダークモードコントラスト修正（アクセシビリティ）
+
+- ユーザー報告「文字が見えない図がある」に対応。全26のMermaid使用レッスンをPlaywrightで機械監査（ライト/ダーク×WCAG AA 4.5:1）した結果、**lesson18・lesson28のstateDiagram-v2でノードラベルのコントラスト比が約1.12:1**（実質不可視）と判明。他24レッスンとライトモードは問題なし。
+- 原因: vitepress-plugin-mermaid はダークモード時に Mermaid のテーマを強制的に `dark` へ切り替えるが、config.mts の `themeVariables`（`primaryTextColor: #1e293b`、ライト背景用の紺色）はそのまま残る。flowchart は影響を受けないが、stateDiagram-v2 は生成CSSで `.nodeLabel{color:#1e293b}` を直接ハードコードするため、ダークテーマの既定ノード背景（ほぼ黒）に紺色の文字が重なる。
+- 修正: `custom.css` に `.dark .mermaid .nodeLabel/.cluster-label/.state-title/.stateLabel text { color/fill: #cccccc !important; }` を追加（Mermaid の ID スコープ インラインスタイルより詳細度で上回るよう `!important` を使用。flowchart が既に使っている色と統一）。
+- 検証: 修正前後で全26レッスン×2モードの機械監査を実施し、修正後は違反0件。lesson18・28をダーク/ライト双方でスクリーンショット目視確認。docs:build 通過。
+- 学び: Mermaid のテーマ変数は図の種類（flowchart / stateDiagram 等）によって適用され方が異なり、カスタム themeVariables が一部の図種でダークモードに正しく追従しないことがある。今後は新しい図の種類（sequenceDiagram 等）を導入する際も、ライト/ダーク双方でコントラストを機械監査する。
