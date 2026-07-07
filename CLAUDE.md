@@ -6,6 +6,8 @@
 
 **JSTQB Foundation Level**（テスト技術者資格 Foundation Level）の合格を目指す、**非公式・非公認**の学習コンテンツです。全 6 章 30 レッスンで構成し、1 レッスンがシラバスの小カテゴリ（またはテスト技法）に対応するよう設計しています。開発の経緯は `SPRINTLOG.md` を参照。
 
+現状: 全 30 レッスンの本文とドリル 186 問（1 レッスン 5〜7 問）が完成済み。以降は `FACTCHECK.md` の裏取りと横断的な品質改善を継続する。
+
 - サイトは [VitePress](https://vitepress.dev/) で構築し、Vercel にデプロイします。
 - 参考にした既存リポジトリ: `ux-certification-basics-ozaki25`（同じ仕組みの検定学習コンテンツ）。
 
