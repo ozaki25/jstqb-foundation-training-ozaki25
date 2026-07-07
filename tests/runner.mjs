@@ -19,9 +19,9 @@
 //   BLOCKS=A-D,O,W npm run test:e2e          # mix of ranges and singletons
 //   BLOCKS=a,b,c npm run test:e2e            # case-insensitive
 //
-// Heavy blocks (walk whole chapters / 100-question samples — minutes each):
-//   N (re-draw walks 100 Q), F/K/E (walk chapter3), G (walk chapter6, 26 Q),
-//   M (random sizes incl. 195 total), W (random-all 195), V (all 6 chapters),
+// Heavy blocks (walk whole chapters / 40-question samples — minutes each):
+//   N (re-draw walks 40 Q), F/K/E (walk chapter3), G (walk chapter6, 12 Q),
+//   M (random sizes incl. 186 total), W (random-all 186), V (all 6 chapters),
 //   A (44 routes), X (12 fresh loads across 6 chapters + 2 random pages).
 // Light blocks: B, C, H, L, R, S, T, U, P, Q, O, I, J.
 //

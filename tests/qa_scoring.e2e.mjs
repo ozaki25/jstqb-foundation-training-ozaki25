@@ -1,5 +1,5 @@
 // ============================================================================
-// UX検定基礎 — QA scoring-correctness E2E suite (SC-*)
+// JSTQB Foundation Level — QA scoring-correctness E2E suite (SC-*)
 //
 // OWNER: Senior QA (scoring correctness / choice shuffle / keyboard).
 //
@@ -52,7 +52,7 @@ function loadAllQuizzes() {
 }
 const ALL = loadAllQuizzes()
 const BY_ID = new Map(ALL.map((q) => [q.id, q]))
-const CH_COUNTS = { 1: 32, 2: 60, 3: 13, 4: 26, 5: 38, 6: 26 }
+const CH_COUNTS = { 1: 32, 2: 32, 3: 20, 4: 48, 5: 42, 6: 12 }
 
 // Quizzes whose choices or question contain backtick `code` spans (test #6).
 const BACKTICK_QUIZZES = ALL.filter(
@@ -192,8 +192,8 @@ const CHAPTER_PATHS = [1, 2, 3, 4, 5, 6].map((n) => [`/quiz/chapter${n}/`, `ch${
 const RANDOM_PATHS = [
   ['/quiz/random-5/', 'rand5'],
   ['/quiz/random-10/', 'rand10'],
-  ['/quiz/random-100/', 'rand100'],
-  ['/quiz/random/', 'rand195'],
+  ['/quiz/random-40/', 'rand40'],
+  ['/quiz/random/', 'rand186'],
 ]
 
 // ============================================================================
@@ -519,7 +519,7 @@ block('L. Backtick code choices score correctly', async ({ t, browser }) => {
   const target = BACKTICK_QUIZZES[0]
   const chOf = (lesson) => {
     const n = parseInt(lesson.replace('lesson', ''), 10)
-    return n <= 5 ? 1 : n <= 15 ? 2 : n <= 17 ? 3 : n <= 21 ? 4 : n <= 27 ? 5 : 6
+    return n <= 5 ? 1 : n <= 10 ? 2 : n <= 13 ? 3 : n <= 21 ? 4 : n <= 28 ? 5 : 6
   }
   const ch = chOf(target.lesson)
   await freshQuiz(page, `/quiz/chapter${ch}/`)

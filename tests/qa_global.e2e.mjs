@@ -1,5 +1,5 @@
 // ============================================================================
-// UX検定基礎 — GLOBAL QA E2E suite (routes / dashboard / nav / a11y / mobile /
+// JSTQB Foundation Level — GLOBAL QA E2E suite (routes / dashboard / nav / a11y / mobile /
 // dark / data integrity). Owner: senior QA (global health).
 //
 // HOW TO RUN
@@ -65,12 +65,12 @@ for (let n = 1; n <= 6; n++) {
 const TOTAL = ALL.length
 
 const CH_TITLES = {
-  1: 'UXインテリジェンスの理念',
-  2: 'UX関連基礎知識',
-  3: 'UXプロジェクト計画',
-  4: 'ユーザー理解',
-  5: 'ユーザー要求定義と具現化',
-  6: 'UXデザイン評価・運用・組織化',
+  1: 'テストの基礎',
+  2: 'ソフトウェア開発ライフサイクル全体を通してのテスト',
+  3: '静的テスト',
+  4: 'テスト分析と設計',
+  5: 'テスト活動のマネジメント',
+  6: 'テストツール',
 }
 
 const STORAGE_KEY = 'quiz-answers'
@@ -119,10 +119,10 @@ const ROUTES = [
   ...[1, 2, 3, 4, 5, 6].map((n) => `/quiz/chapter${n}/`),
   '/quiz/random-5/',
   '/quiz/random-10/',
-  '/quiz/random-100/',
+  '/quiz/random-40/',
   '/quiz/random/',
   '/quiz/review/',
-  ...Array.from({ length: 31 }, (_, i) => `/lessons/lesson${String(i + 1).padStart(2, '0')}/`),
+  ...Array.from({ length: 30 }, (_, i) => `/lessons/lesson${String(i + 1).padStart(2, '0')}/`),
 ]
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -302,8 +302,8 @@ block('D. GL-dashboard answered state', async ({ t, browser }) => {
     const card2 = cards.find((c) => c.href === '/quiz/chapter2/')
     t.check('ch1 card shows 5 / 32', card1 && card1.stats.includes(`5 / ${CH_TOTAL[1]}`), JSON.stringify(card1))
     t.check('ch1 card shows 要復習 2', card1 && /要復習\s*2/.test(card1.wrong || ''), JSON.stringify(card1))
-    t.check('ch4 card shows 3 / 26', card4 && card4.stats.includes(`3 / ${CH_TOTAL[4]}`), JSON.stringify(card4))
-    t.check('ch2 card shows 0 / 60', card2 && card2.stats.includes(`0 / ${CH_TOTAL[2]}`), JSON.stringify(card2))
+    t.check('ch4 card shows 3 / 48', card4 && card4.stats.includes(`3 / ${CH_TOTAL[4]}`), JSON.stringify(card4))
+    t.check('ch2 card shows 0 / 32', card2 && card2.stats.includes(`0 / ${CH_TOTAL[2]}`), JSON.stringify(card2))
 
     // reset button now visible
     t.check('reset button visible when answered', (await page.$('.btn-reset-progress')) !== null, 'reset missing')
@@ -359,11 +359,11 @@ block('E. GL-data integrity counts', async ({ t, browser }) => {
       )
       sumTotal += CH_TOTAL[n]
     }
-    t.check('chapter totals sum to 195', sumTotal === 195 && TOTAL === 195, `sum=${sumTotal} TOTAL=${TOTAL}`)
+    t.check('chapter totals sum to 186', sumTotal === 186 && TOTAL === 186, `sum=${sumTotal} TOTAL=${TOTAL}`)
 
     // The "全 N 問から" random button reflects TOTAL.
     const allBtn = (await page.textContent('.quiz-top-actions .btn-action:last-child')) || ''
-    t.check('random-all button shows 195', allBtn.includes('195'), `btn="${allBtn.trim()}"`)
+    t.check('random-all button shows 186', allBtn.includes('186'), `btn="${allBtn.trim()}"`)
 
     t.check('data-integrity no errors', !hasErrors(errors), errDetail('data-integrity', errors))
   } catch (e) {

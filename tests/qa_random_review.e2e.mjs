@@ -1,5 +1,5 @@
 // ============================================================================
-// UX検定基礎 — QA suite for RANDOM draw / mock-exam / REVIEW pages.
+// JSTQB Foundation Level — QA suite for RANDOM draw / mock-exam / REVIEW pages.
 //
 // Owner: Senior QA (random sampling, mock-exam volume, review page).
 // Runs against the already-running preview at http://localhost:4173 — this
@@ -17,7 +17,7 @@
 //     correct / a wrong choice by TEXT (independent of the per-card shuffle).
 //
 // SPEC NOTES established by reading QuizPage.vue / QuizReview.vue:
-//   * Totals: random-5=5, random-10=10, random-100=100, random(all)=195.
+//   * Totals: random-5=5, random-10=10, random-40=40, random(all)=186.
 //   * Sample stability is keyed in sessionStorage:
 //       random-N    → quiz-sample-n{N}
 //       shuffle all  → quiz-sample-shuffle-all-{len}   (random-all & review)
@@ -58,7 +58,7 @@ function loadAllQuizzes() {
 }
 const ALL = loadAllQuizzes()
 const BY_ID = new Map(ALL.map((q) => [q.id, q]))
-const TOTAL = 195
+const TOTAL = 186
 
 function normalize(s) {
   return s.replace(/`/g, '').replace(/\s+/g, ' ').trim()
@@ -142,14 +142,14 @@ async function readSampleKey(page, key) {
 const RANDOM_CASES = [
   ['/quiz/random-5/', 5, 'quiz-sample-n5'],
   ['/quiz/random-10/', 10, 'quiz-sample-n10'],
-  ['/quiz/random-100/', 100, 'quiz-sample-n100'],
-  ['/quiz/random/', 195, 'quiz-sample-shuffle-all-195'],
+  ['/quiz/random-40/', 40, 'quiz-sample-n40'],
+  ['/quiz/random/', 186, 'quiz-sample-shuffle-all-186'],
 ]
 
 // ============================================================================
-// RR-A — Exact totals on every random page (5 / 10 / 100 / 195)
+// RR-A — Exact totals on every random page (5 / 10 / 40 / 186)
 // ============================================================================
-block('RR-A. Random totals exact (5/10/100/195)', async ({ t, browser }) => {
+block('RR-A. Random totals exact (5/10/40/186)', async ({ t, browser }) => {
   const { page, errors } = await newInstrumentedPage(browser)
   for (const [path, n, key] of RANDOM_CASES) {
     await gotoQuiz(page, path)
@@ -232,12 +232,12 @@ block('RR-C. Stable across navigate-away & back', async ({ t, browser }) => {
 // ============================================================================
 // RR-D — New session (sessionStorage cleared, localStorage kept) → re-draw.
 //         Confirms the sample key is regenerated. (May coincide by chance for
-//         random-all since it shuffles the same 195; we assert KEY presence and
+//         random-all since it shuffles the same 186; we assert KEY presence and
 //         that for sampled pages the *set* is freshly written.)
 // ============================================================================
 block('RR-D. New session re-draws sample', async ({ t, browser }) => {
   const { page } = await newInstrumentedPage(browser)
-  // random-100: sampling 100 of 195 — set equality across two independent draws
+  // random-40: sampling 40 of 186 — set equality across two independent draws
   // is astronomically unlikely, so a differing set is a reliable re-draw signal.
   for (const [path, n, key] of [RANDOM_CASES[2]]) {
     await gotoQuiz(page, path)
@@ -262,56 +262,57 @@ block('RR-D. New session re-draws sample', async ({ t, browser }) => {
 })
 
 // ============================================================================
-// RR-E — Random-100 full walk → finish score integrity, then re-draw button
-//         changes the set. (Heavy: 100 answers.)
+// RR-E — Random-40 (mock exam) full walk → finish score integrity, then
+//        re-draw button changes the set. (Heavy: 40 answers.)
 // ============================================================================
-block('RR-E. random-100 finish integrity + re-draw button', async ({ t, browser }) => {
+block('RR-E. random-40 finish integrity + re-draw button', async ({ t, browser }) => {
   const { page } = await newInstrumentedPage(browser)
-  await gotoQuiz(page, '/quiz/random-100/')
+  await gotoQuiz(page, '/quiz/random-40/')
   await clearStorage(page)
-  await gotoQuiz(page, '/quiz/random-100/')
+  await gotoQuiz(page, '/quiz/random-40/')
   await page.waitForTimeout(200)
 
-  const before = JSON.parse((await readSampleKey(page, 'quiz-sample-n100')) || '[]')
-  t.check('random-100 head: 100 sampled', before.length === 100, `len=${before.length}`)
+  const before = JSON.parse((await readSampleKey(page, 'quiz-sample-n40')) || '[]')
+  t.check('random-40 head: 40 sampled', before.length === 40, `len=${before.length}`)
 
-  // Answer with a known pattern: first 3 wrong, rest correct → correct = 97.
+  // Answer with a known pattern: first 3 wrong, rest correct → correct = 37.
   let wrong = 0
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 40; i++) {
     const qid = await currentQuizId(page)
     if (i < 3) { await clickWrong(page, qid); wrong++ } else { await clickCorrect(page, qid) }
     await page.waitForSelector('.quiz-result')
-    if (i < 99) { await page.click('.btn-next'); await page.waitForSelector('.quiz-card') }
+    if (i < 39) { await page.click('.btn-next'); await page.waitForSelector('.quiz-card') }
   }
   await page.click('.btn-next') // 結果を見る
   await page.waitForSelector('.quiz-finish')
 
   const score = await page.textContent('.finish-score')
-  const expectCorrect = 100 - wrong
-  t.check('random-100 finish score = 97 / 100', score.includes(`${expectCorrect} / 100`), score.trim())
+  const expectCorrect = 40 - wrong // 37
+  const expectRate = Math.round((expectCorrect / 40) * 100) // 93
+  t.check('random-40 finish score = 37 / 40', score.includes(`${expectCorrect} / 40`), score.trim())
   const rate = await page.textContent('.finish-rate')
-  t.check('random-100 rate = 97%', rate.includes('97%'), rate.trim())
+  t.check(`random-40 rate = ${expectRate}%`, rate.includes(`${expectRate}%`), rate.trim())
   const wrongRows = await page.$$eval('.finish-row[data-correct="false"]', (e) => e.length)
-  t.check('random-100 wrong list = 3', wrongRows === wrong, `rows=${wrongRows}`)
+  t.check('random-40 wrong list = 3', wrongRows === wrong, `rows=${wrongRows}`)
   // review CTA appears (wrong>0) on a random page (NOT hideReviewCta)
-  t.check('random-100 finish shows review CTA (wrong>0)', (await page.$('.btn-review-cta')) !== null)
+  t.check('random-40 finish shows review CTA (wrong>0)', (await page.$('.btn-review-cta')) !== null)
 
   // re-draw button label + new set
   const restartBtn = await page.$('.btn-restart:not(.btn-review-cta):not(.btn-next-chapter)')
   const label = await restartBtn.textContent()
-  t.check('random-100 restart label = 別の 100 問でもう一度', label.includes('別の 100 問'), label.trim())
+  t.check('random-40 restart label = 別の 40 問でもう一度', label.includes('別の 40 問'), label.trim())
   await restartBtn.click()
   await page.waitForSelector('.quiz-card')
   await page.waitForTimeout(150)
-  const after = JSON.parse((await readSampleKey(page, 'quiz-sample-n100')) || '[]')
+  const after = JSON.parse((await readSampleKey(page, 'quiz-sample-n40')) || '[]')
   t.check('re-draw resets to Q1', (await page.textContent('.quiz-num')).startsWith('1 /'))
-  t.check('re-draw changes the 100-set', JSON.stringify(before) !== JSON.stringify(after),
+  t.check('re-draw changes the 40-set', JSON.stringify(before) !== JSON.stringify(after),
     'set unchanged after re-draw')
-  t.check('re-draw set still 100', after.length === 100, `len=${after.length}`)
+  t.check('re-draw set still 40', after.length === 40, `len=${after.length}`)
 })
 
 // ============================================================================
-// RR-F — random-all (shuffle 195) re-draw changes ORDER, restart label,
+// RR-F — random-all (shuffle 186) re-draw changes ORDER, restart label,
 //         and answering scores correctly (random-context correctness check).
 // ============================================================================
 block('RR-F. random-all shuffle re-draw + correctness', async ({ t, browser }) => {
@@ -321,12 +322,12 @@ block('RR-F. random-all shuffle re-draw + correctness', async ({ t, browser }) =
   await gotoQuiz(page, '/quiz/random/')
   await page.waitForTimeout(250)
 
-  const key = 'quiz-sample-shuffle-all-195'
+  const key = 'quiz-sample-shuffle-all-186'
   const before = JSON.parse((await readSampleKey(page, key)) || '[]')
-  t.check('random-all sample = 195 ids', before.length === 195, `len=${before.length}`)
+  t.check('random-all sample = 186 ids', before.length === 186, `len=${before.length}`)
   // it is a permutation of ALL ids (same set, possibly different order)
   const allIds = new Set(ALL.map((q) => q.id))
-  t.check('random-all is a permutation of all 195', new Set(before).size === 195 &&
+  t.check('random-all is a permutation of all 186', new Set(before).size === 186 &&
     before.every((id) => allIds.has(id)), `uniq=${new Set(before).size}`)
 
   // correctness in random context: clicking the data-correct choice → badge true,
@@ -345,20 +346,20 @@ block('RR-F. random-all shuffle re-draw + correctness', async ({ t, browser }) =
     normalize(correctVisible) === normalize(BY_ID.get(qid).choices[BY_ID.get(qid).answer]),
     `hl="${correctVisible}"`)
 
-  // Walk to finish to reach the re-draw button. (195 answers — heavy.)
+  // Walk to finish to reach the re-draw button. (186 answers — heavy.)
   // Continue from Q2 (Q1 already answered correct).
   await page.click('.btn-next')
   await page.waitForSelector('.quiz-card')
-  for (let i = 1; i < 195; i++) {
+  for (let i = 1; i < 186; i++) {
     const id = await currentQuizId(page)
     await clickCorrect(page, id)
     await page.waitForSelector('.quiz-result')
-    if (i < 194) { await page.click('.btn-next'); await page.waitForSelector('.quiz-card') }
+    if (i < 185) { await page.click('.btn-next'); await page.waitForSelector('.quiz-card') }
   }
   await page.click('.btn-next')
   await page.waitForSelector('.quiz-finish')
   const score = await page.textContent('.finish-score')
-  t.check('random-all all-correct → 195 / 195', score.includes('195 / 195'), score.trim())
+  t.check('random-all all-correct → 186 / 186', score.includes('186 / 186'), score.trim())
 
   const restartBtn = await page.$('.btn-restart:not(.btn-review-cta):not(.btn-next-chapter)')
   const label = await restartBtn.textContent()
@@ -368,29 +369,30 @@ block('RR-F. random-all shuffle re-draw + correctness', async ({ t, browser }) =
   await page.waitForSelector('.quiz-card')
   await page.waitForTimeout(150)
   const after = JSON.parse((await readSampleKey(page, key)) || '[]')
-  t.check('shuffle re-draw still 195 (same set)', after.length === 195 &&
-    new Set(after).size === 195, `len=${after.length}`)
+  t.check('shuffle re-draw still 186 (same set)', after.length === 186 &&
+    new Set(after).size === 186, `len=${after.length}`)
   t.check('shuffle re-draw changes ORDER', JSON.stringify(before) !== JSON.stringify(after),
     'order identical after reshuffle (improbable)')
   t.check('random-all no JS errors', errors.pageErrors.length === 0, summarizeErrors(errors))
 })
 
 // ============================================================================
-// RR-G — random-100 == mock-exam volume aligned with the real 100-question CBT
-//         (problem count only; distribution is out of scope per spec).
+// RR-G — random-40 == mock-exam volume aligned with the real JSTQB Foundation
+//         Level exam (40 questions / 60 minutes / pass line 65%; distribution
+//         is out of scope per spec — problem count only).
 // ============================================================================
-block('RR-G. random-100 mock-exam volume = 100', async ({ t, browser }) => {
+block('RR-G. random-40 mock-exam volume = 40', async ({ t, browser }) => {
   const { page } = await newInstrumentedPage(browser)
-  await gotoQuiz(page, '/quiz/random-100/')
+  await gotoQuiz(page, '/quiz/random-40/')
   await clearStorage(page)
-  await gotoQuiz(page, '/quiz/random-100/')
+  await gotoQuiz(page, '/quiz/random-40/')
   await page.waitForTimeout(200)
   const num = await page.textContent('.quiz-num')
-  t.check('random-100 mock volume = 100 (matches official CBT count)', parseTotal(num) === 100, num.trim())
-  const ids = JSON.parse((await readSampleKey(page, 'quiz-sample-n100')) || '[]')
-  t.check('random-100 draws from the full 195 pool', ids.length === 100 && ids.every((id) => BY_ID.has(id)),
+  t.check('random-40 mock volume = 40 (matches official JSTQB exam count)', parseTotal(num) === 40, num.trim())
+  const ids = JSON.parse((await readSampleKey(page, 'quiz-sample-n40')) || '[]')
+  t.check('random-40 draws from the full 186 pool', ids.length === 40 && ids.every((id) => BY_ID.has(id)),
     `len=${ids.length}`)
-  t.check('100 <= total pool 195', 100 <= TOTAL)
+  t.check('40 <= total pool 186', 40 <= TOTAL)
 })
 
 // ============================================================================

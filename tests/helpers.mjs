@@ -1,4 +1,4 @@
-// Shared E2E helpers for the UX検定基礎 drill suite.
+// Shared E2E helpers for the JSTQB Foundation Level drill suite.
 //
 // ── Browser launch ────────────────────────────────────────────────────────
 // 依存は `playwright-core`（インストール時にブラウザを外部DLしない）+

@@ -1,5 +1,5 @@
 // ============================================================================
-// UX検定基礎 — Resume / state-persistence E2E suite (QA owner: 状態永続・再開機構)
+// JSTQB Foundation Level — Resume / state-persistence E2E suite (QA owner: 状態永続・再開機構)
 //
 // Exhaustively exercises the QuizPage resume/persistence state machine:
 //   localStorage `quiz-answers`        — answer records (cross-session)
@@ -14,7 +14,7 @@
 //   BLOCKS=K,O,P node tests/qa_resume.e2e.mjs     # singletons
 //   The runner keys on each block's LEADING LETTER. Blocks here are named
 //   "A. [RS] …" .. "P. [RS] …" so they split cleanly with BLOCKS=. The whole
-//   file is medium weight (it deliberately avoids walking 100/195-question
+//   file is medium weight (it deliberately avoids walking 40/186-question
 //   samples to completion); ~10 blocks run comfortably in one process.
 //
 // EACH BLOCK USES A SINGLE BROWSER CONTEXT. Multi-sub-case blocks (G/J/M) reuse
@@ -57,7 +57,7 @@ function loadAllQuizzes() {
 }
 const ALL = loadAllQuizzes()
 const BY_ID = new Map(ALL.map((q) => [q.id, q]))
-const CH_COUNTS = { 1: 32, 2: 60, 3: 13, 4: 26, 5: 38, 6: 26 }
+const CH_COUNTS = { 1: 32, 2: 32, 3: 20, 4: 48, 5: 42, 6: 12 }
 
 // ── DOM helpers (shared shape with quiz.e2e.mjs) ────────────────────────────
 function normalize(s) {
@@ -183,7 +183,7 @@ block('B. [RS] Same-session view restore', async ({ t, browser }) => {
   await gotoQuiz(page, '/quiz/chapter2/')
   t.check('same-session restores position Q4', (await curNum(page)) === 4, await page.textContent('.quiz-num'))
   t.check('same-session: NO resume toast', (await page.$('.quiz-resume-toast')) === null)
-  t.check('same-session: 3 answered preserved', (await page.textContent('.quiz-progress-text')).includes('3 / 60'))
+  t.check('same-session: 3 answered preserved', (await page.textContent('.quiz-progress-text')).includes('3 / 32'))
 
   // the restored current card (Q4) is unanswered → next disabled, no result yet
   t.check('restored Q4 is unanswered (next disabled)', (await page.getAttribute('.btn-next', 'disabled')) !== null)
@@ -250,7 +250,7 @@ block('D. [RS] New-session consecutive resume + toast', async ({ t, browser }) =
   t.check('resume toast shown', toast !== null)
   if (toast) t.check('toast says 6 問目', (await toast.textContent()).includes('6 問目'),
     (await toast.textContent()).trim())
-  t.check('resume: 5 answered preserved', (await page.textContent('.quiz-progress-text')).includes('5 / 26'))
+  t.check('resume: 5 answered preserved', (await page.textContent('.quiz-progress-text')).includes('5 / 48'))
   // The resumed current card (Q6) should be unanswered
   t.check('resumed card Q6 unanswered', (await page.$('.quiz-result')) === null)
 })
@@ -288,7 +288,7 @@ block('E. [RS] New-session gapped resume (first unanswered)', async ({ t, browse
   t.check('gapped resume toast says 2 問目', toast !== null && (await toast.textContent()).includes('2 問目'),
     toast ? (await toast.textContent()).trim() : 'no toast')
   // answered count = 2 (Q1 + Q3), Q2 is the hole
-  t.check('gapped resume: 2 answered', (await page.textContent('.quiz-progress-text')).includes('2 / 26'))
+  t.check('gapped resume: 2 answered', (await page.textContent('.quiz-progress-text')).includes('2 / 48'))
 })
 
 // ============================================================================
@@ -329,7 +329,7 @@ block('G. [RS] Resume toast actions (restart / close)', async ({ t, browser }) =
   await page.waitForSelector('.quiz-card')
   t.check('restart → back to Q1', (await curNum(page)) === 1)
   t.check('restart dismisses toast', (await page.$('.quiz-resume-toast')) === null)
-  t.check('restart resets progress to 0', (await page.textContent('.quiz-progress-text')).includes('0 / 26'))
+  t.check('restart resets progress to 0', (await page.textContent('.quiz-progress-text')).includes('0 / 48'))
   // restart() in fixed-order mode clears the chapter's localStorage answers
   t.check('restart clears this chapter localStorage answers', Object.keys(await lsAnswers(page)).length === 0,
     JSON.stringify(Object.keys(await lsAnswers(page))))
@@ -347,7 +347,7 @@ block('G. [RS] Resume toast actions (restart / close)', async ({ t, browser }) =
   await page.waitForTimeout(100)
   t.check('close dismisses toast', (await page.$('.quiz-resume-toast')) === null)
   t.check('close keeps position (still Q5)', (await curNum(page)) === 5)
-  t.check('close keeps answers (4 answered)', (await page.textContent('.quiz-progress-text')).includes('4 / 26'))
+  t.check('close keeps answers (4 answered)', (await page.textContent('.quiz-progress-text')).includes('4 / 48'))
   // localStorage untouched by close
   t.check('close does NOT clear localStorage', Object.keys(await lsAnswers(page)).length === 4)
 })
@@ -370,7 +370,7 @@ block('H. [RS] Per-chapter independence', async ({ t, browser }) => {
   await gotoQuiz(page, '/quiz/chapter2/')
   t.check('ch2 opens fresh at Q1', (await curNum(page)) === 1, await page.textContent('.quiz-num'))
   t.check('ch2 no resume toast', (await page.$('.quiz-resume-toast')) === null)
-  t.check('ch2 shows 0 answered (uncontaminated)', (await page.textContent('.quiz-progress-text')).includes('0 / 60'))
+  t.check('ch2 shows 0 answered (uncontaminated)', (await page.textContent('.quiz-progress-text')).includes('0 / 32'))
 
   // interact with ch2 (answer 1, advance to Q2) so its own quiz-state key is
   // written — and confirm it does not perturb ch1's persisted state.
@@ -430,7 +430,7 @@ block('I. [RS] Top reset → chapter fresh', async ({ t, browser }) => {
   t.check('post-reset chapter3 is fresh Q1 (not finish)', (await page.$('.quiz-finish')) === null && (await curNum(page)) === 1,
     `finish=${(await page.$('.quiz-finish')) !== null} num=${await page.textContent('.quiz-num')}`)
   t.check('post-reset chapter3 no toast', (await page.$('.quiz-resume-toast')) === null)
-  t.check('post-reset chapter3 0 answered', (await page.textContent('.quiz-progress-text')).includes('0 / 13'))
+  t.check('post-reset chapter3 0 answered', (await page.textContent('.quiz-progress-text')).includes('0 / 20'))
 })
 
 // ============================================================================
@@ -469,7 +469,7 @@ block('J. [RS] Random/shuffle resume semantics', async ({ t, browser }) => {
   t.check('random-10 new session: fresh sample key present', sampleNew !== null)
   t.check('random-10 total still 10', (await page.textContent('.quiz-num')).includes('/ 10'))
 
-  // random/ (shuffle=true, all 195): new session does not resume/toast
+  // random/ (shuffle=true, all 186): new session does not resume/toast
   await gotoQuiz(page, '/quiz/random/')
   await clearStorage(page)
   await gotoQuiz(page, '/quiz/random/')

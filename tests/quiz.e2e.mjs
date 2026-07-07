@@ -1,5 +1,5 @@
 // ============================================================================
-// UX検定基礎 — Playwright E2E suite (drill / quiz focused, exhaustive).
+// JSTQB Foundation Level — Playwright E2E suite (drill / quiz focused, exhaustive).
 //
 // HOW TO RUN
 //   npm run test:e2e         (requires `npm run docs:preview` serving :4173)
@@ -46,16 +46,16 @@ const BY_CHAPTER = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] }
 function chapterOf(lesson) {
   const n = parseInt(lesson.replace('lesson', ''), 10)
   if (n <= 5) return 1
-  if (n <= 15) return 2
-  if (n <= 17) return 3
+  if (n <= 10) return 2
+  if (n <= 13) return 3
   if (n <= 21) return 4
-  if (n <= 27) return 5
+  if (n <= 28) return 5
   return 6
 }
 for (const q of ALL) BY_CHAPTER[chapterOf(q.lesson)].push(q)
 
-const CH_COUNTS = { 1: 32, 2: 60, 3: 13, 4: 26, 5: 38, 6: 26 }
-const TOTAL = 195
+const CH_COUNTS = { 1: 32, 2: 32, 3: 20, 4: 48, 5: 42, 6: 12 }
+const TOTAL = 186
 
 // ── DOM interaction helpers ─────────────────────────────────────────────────
 
@@ -140,10 +140,10 @@ block('A. Page smoke (all routes load cleanly)', async ({ t, browser }) => {
     '/', '/quiz/',
     '/quiz/chapter1/', '/quiz/chapter2/', '/quiz/chapter3/',
     '/quiz/chapter4/', '/quiz/chapter5/', '/quiz/chapter6/',
-    '/quiz/random-5/', '/quiz/random-10/', '/quiz/random-100/', '/quiz/random/',
+    '/quiz/random-5/', '/quiz/random-10/', '/quiz/random-40/', '/quiz/random/',
     '/quiz/review/',
   ]
-  for (let i = 1; i <= 31; i++) {
+  for (let i = 1; i <= 30; i++) {
     paths.push(`/lessons/lesson${String(i).padStart(2, '0')}/`)
   }
   // ALL pages — including random/shuffle — must now hydrate cleanly. The earlier
@@ -270,14 +270,14 @@ block('D. Correctness vs display shuffle', async ({ t, browser }) => {
 // ============================================================================
 // BLOCK E — Navigation boundaries: prev/next round trip, final → results
 // ============================================================================
-block('E. Navigation boundaries (chapter3, 13 Q)', async ({ t, browser }) => {
+block('E. Navigation boundaries (chapter3, 20 Q)', async ({ t, browser }) => {
   const { page } = await newInstrumentedPage(browser)
   await gotoQuiz(page, '/quiz/chapter3/')
   await clearStorage(page)
   await gotoQuiz(page, '/quiz/chapter3/')
 
   const count = CH_COUNTS[3]
-  t.check('chapter3 total = 13', (await page.textContent('.quiz-num')).includes(`/ ${count}`),
+  t.check('chapter3 total = 20', (await page.textContent('.quiz-num')).includes(`/ ${count}`),
     await page.textContent('.quiz-num'))
 
   // Answer Q1, go next, then prev — answer state should persist
@@ -286,13 +286,13 @@ block('E. Navigation boundaries (chapter3, 13 Q)', async ({ t, browser }) => {
   await page.click('.btn-next')
   await page.waitForSelector('.quiz-card')
   const numAfterNext = await page.textContent('.quiz-num')
-  t.check('next advances to 2/13', numAfterNext.startsWith('2 /'), numAfterNext)
+  t.check('next advances to 2/20', numAfterNext.startsWith('2 /'), numAfterNext)
 
   // prev appears now
   t.check('btn-prev visible on Q2', (await page.$('.btn-prev')) !== null)
   await page.click('.btn-prev')
   await page.waitForSelector('.quiz-card')
-  t.check('prev returns to 1/13', (await page.textContent('.quiz-num')).startsWith('1 /'))
+  t.check('prev returns to 1/20', (await page.textContent('.quiz-num')).startsWith('1 /'))
   // Q1 still shows result (answer persisted in view)
   t.check('Q1 answer persisted after prev', (await page.$('.quiz-result')) !== null)
 
@@ -435,18 +435,18 @@ block('I. Same-session resume (view position restore)', async ({ t, browser }) =
     await page.waitForSelector('.quiz-card')
   }
   const numBefore = await page.textContent('.quiz-num')
-  t.check('advanced to 4/60', numBefore.startsWith('4 /'), numBefore)
+  t.check('advanced to 4/32', numBefore.startsWith('4 /'), numBefore)
 
   // navigate away to a lesson then back via reload (same tab → sessionStorage kept)
   await page.goto(url('/lessons/lesson06/'), { waitUntil: 'networkidle' })
   await gotoQuiz(page, '/quiz/chapter2/')
   const numAfter = await page.textContent('.quiz-num')
-  t.check('same-session restores view at 4/60', numAfter.startsWith('4 /'), numAfter)
+  t.check('same-session restores view at 4/32', numAfter.startsWith('4 /'), numAfter)
   // no resume toast in same-session restore path
   t.check('no resume toast on same-session restore', (await page.$('.quiz-resume-toast')) === null)
   // earlier answers preserved: progress shows 3 answered
   const prog = await page.textContent('.quiz-progress-text')
-  t.check('progress shows 3 answered', prog.includes('3 / 60'), prog.trim())
+  t.check('progress shows 3 answered', prog.includes('3 / 32'), prog.trim())
 })
 
 // ============================================================================
@@ -482,7 +482,7 @@ block('J. New-session resume toast', async ({ t, browser }) => {
   await page.click('.quiz-resume-toast-restart')
   await page.waitForSelector('.quiz-card')
   t.check('restart → back to Q1', (await page.textContent('.quiz-num')).startsWith('1 /'))
-  t.check('restart clears prior answers (progress 0)', (await page.textContent('.quiz-progress-text')).includes('0 / 26'))
+  t.check('restart clears prior answers (progress 0)', (await page.textContent('.quiz-progress-text')).includes('0 / 48'))
   t.check('toast dismissed after restart', (await page.$('.quiz-resume-toast')) === null)
 })
 
@@ -550,8 +550,8 @@ block('M. Random sample sizes + stability', async ({ t, browser }) => {
   const cases = [
     ['/quiz/random-5/', 5],
     ['/quiz/random-10/', 10],
-    ['/quiz/random-100/', 100],
-    ['/quiz/random/', 195],
+    ['/quiz/random-40/', 40],
+    ['/quiz/random/', 186],
   ]
   const { page } = await newInstrumentedPage(browser)
   for (const [path, n] of cases) {
@@ -575,27 +575,27 @@ block('M. Random sample sizes + stability', async ({ t, browser }) => {
 // ============================================================================
 block('N. Random re-draw on restart', async ({ t, browser }) => {
   const { page } = await newInstrumentedPage(browser)
-  await gotoQuiz(page, '/quiz/random-100/')
+  await gotoQuiz(page, '/quiz/random-40/')
   await clearStorage(page)
-  await gotoQuiz(page, '/quiz/random-100/')
+  await gotoQuiz(page, '/quiz/random-40/')
 
   // capture the set of ids by walking? too slow. Capture first id + sample-key value.
-  const before = await page.evaluate(() => sessionStorage.getItem('quiz-sample-n100'))
-  // answer all 100 quickly to reach finish, then restart with re-draw
-  for (let i = 0; i < 100; i++) {
+  const before = await page.evaluate(() => sessionStorage.getItem('quiz-sample-n40'))
+  // answer all 40 quickly to reach finish, then restart with re-draw
+  for (let i = 0; i < 40; i++) {
     const qid = await currentQuizId(page)
     await clickCorrect(page, qid)
     await page.waitForSelector('.quiz-result')
-    if (i < 99) { await page.click('.btn-next'); await page.waitForSelector('.quiz-card') }
+    if (i < 39) { await page.click('.btn-next'); await page.waitForSelector('.quiz-card') }
   }
   await page.click('.btn-next') // 結果を見る
   await page.waitForSelector('.quiz-finish')
   const restartBtn = await page.$('.btn-restart:not(.btn-review-cta)')
   const label = await restartBtn.textContent()
-  t.check('random restart label = 別の 100 問でもう一度', label.includes('別の 100 問'), label.trim())
+  t.check('random restart label = 別の 40 問でもう一度', label.includes('別の 40 問'), label.trim())
   await restartBtn.click()
   await page.waitForSelector('.quiz-card')
-  const after = await page.evaluate(() => sessionStorage.getItem('quiz-sample-n100'))
+  const after = await page.evaluate(() => sessionStorage.getItem('quiz-sample-n40'))
   t.check('re-draw changes sample set', before !== after, 'sample unchanged after re-draw')
   t.check('re-draw resets to Q1', (await page.textContent('.quiz-num')).startsWith('1 /'))
 })
@@ -674,11 +674,11 @@ block('P. Quiz top dashboard', async ({ t, browser }) => {
   await page.waitForSelector('.quiz-top')
 
   const answered = await page.textContent('.quiz-top-summary .summary-item:first-child .summary-value')
-  t.check('top: answered 3 / 195', answered.replace(/\s/g, '') === '3/195', answered.trim())
+  t.check('top: answered 3 / 186', answered.replace(/\s/g, '') === '3/186', answered.trim())
 
-  // total questions shown = 195 (random全 button)
+  // total questions shown = 186 (random全 button)
   const randAll = await page.textContent('.quiz-top-actions a:last-child')
-  t.check('top: random-all shows 195', randAll.includes('195'), randAll.trim())
+  t.check('top: random-all shows 186', randAll.includes('186'), randAll.trim())
 
   // 6 chapter cards
   const cards = await page.$$eval('.chapter-card', (e) => e.length)
@@ -729,7 +729,7 @@ block('Q. Reset progress from top', async ({ t, browser }) => {
   await resetBtn.click()
   await page.waitForTimeout(300)
   const answered = await page.textContent('.quiz-top-summary .summary-item:first-child .summary-value')
-  t.check('after reset answered = 0 / 195', answered.replace(/\s/g, '') === '0/195', answered.trim())
+  t.check('after reset answered = 0 / 186', answered.replace(/\s/g, '') === '0/186', answered.trim())
   const ls = await page.evaluate(() => localStorage.getItem('quiz-answers'))
   t.check('localStorage answers cleared', ls === null, `ls=${ls}`)
 })
@@ -878,7 +878,7 @@ block('V. SSR/CSR + data integrity', async ({ t, browser }) => {
   t.check('chapter2 fixed-order: no hydration/console warnings', errors.consoleErrors.length === 0,
     summarizeErrors(errors))
 
-  // Data integrity: each chapter page total equals expected and they sum to 195.
+  // Data integrity: each chapter page total equals expected and they sum to 186.
   let sum = 0
   for (let ch = 1; ch <= 6; ch++) {
     await gotoQuiz(page, `/quiz/chapter${ch}/`)
@@ -890,20 +890,20 @@ block('V. SSR/CSR + data integrity', async ({ t, browser }) => {
     t.check(`chapter${ch} total = ${CH_COUNTS[ch]}`, total === CH_COUNTS[ch], `got ${total}`)
     sum += total
   }
-  t.check('chapter totals sum to 195', sum === TOTAL, `sum=${sum}`)
+  t.check('chapter totals sum to 186', sum === TOTAL, `sum=${sum}`)
 })
 
 // ============================================================================
-// BLOCK W — Random page (shuffle all 195) loads & is interactive, CSR re-draw OK
+// BLOCK W — Random page (shuffle all 186) loads & is interactive, CSR re-draw OK
 // ============================================================================
-block('W. Random-all (shuffle 195) interactive', async ({ t, browser }) => {
+block('W. Random-all (shuffle 186) interactive', async ({ t, browser }) => {
   const { page, errors } = await newInstrumentedPage(browser)
   await gotoQuiz(page, '/quiz/random/')
   await clearStorage(page)
   await gotoQuiz(page, '/quiz/random/')
   await page.waitForTimeout(300) // let onMounted sampling + per-card shuffle settle
   const num = await page.textContent('.quiz-num')
-  t.check('random-all total = 195', num.includes('/ 195'), num)
+  t.check('random-all total = 186', num.includes('/ 186'), num)
   // Post-fix, the shuffle page must hydrate cleanly (no JS errors AND no hydration
   // mismatch). A reappearing mismatch flags regression of the SSR/CSR sampling fix.
   t.check('random-all no JS errors', errors.pageErrors.length === 0, summarizeErrors(errors))
@@ -922,7 +922,7 @@ block('W. Random-all (shuffle 195) interactive', async ({ t, browser }) => {
   // restart label for shuffle (no randomSample) = 順番をシャッフルしてもう一度 — verify on finish is heavy;
   // assert the sample key is the shuffle scope key.
   const key = await page.evaluate(() => Object.keys(sessionStorage).filter((k) => k.startsWith('quiz-sample-shuffle')))
-  t.check('random-all uses shuffle sample key', key.some((k) => k.includes('all-195')), JSON.stringify(key))
+  t.check('random-all uses shuffle sample key', key.some((k) => k.includes('all-186')), JSON.stringify(key))
 })
 
 // ============================================================================
