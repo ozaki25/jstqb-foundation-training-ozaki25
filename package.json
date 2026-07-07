@@ -1,0 +1,46 @@
+{
+  "name": "jstqb-foundation-training-ozaki25",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "JSTQB Foundation Level の合格を目指す非公式の学習コンテンツです。",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "docs:lint": "textlint \"docs/**/*.md\"",
+    "quiz:validate": "node scripts/quiz-validate.mjs",
+    "check:bold": "find docs/lessons -maxdepth 2 -name index.md -print0 | xargs -0 -r node .claude/hooks/check-bold.js",
+    "check:style": "node .claude/hooks/check-style.js",
+    "pwa:icons": "pwa-assets-generator",
+    "test:e2e": "node tests/run-all.mjs",
+    "test:e2e:main": "node tests/quiz.e2e.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ozaki25/jstqb-foundation-training-ozaki25"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@sparticuz/chromium": "^149.0.0",
+    "@vite-pwa/assets-generator": "^1.0.2",
+    "@vite-pwa/vitepress": "^1.1.0",
+    "markdown-it-cjk-friendly": "^2.0.2",
+    "mermaid": "^11.14.0",
+    "playwright-core": "^1.60.0",
+    "textlint": "^15.6.0",
+    "textlint-filter-rule-comments": "^1.3.0",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "vitepress-plugin-tabs": "^0.8.0"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "vite-plugin-pwa": "^1.2.0"
+  }
+}
