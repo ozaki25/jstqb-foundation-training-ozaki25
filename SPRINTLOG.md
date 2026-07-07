@@ -58,3 +58,20 @@
 - master から main ブランチを作成した。
 - `ux-certification-basics-ozaki25` の仕組み（VitePress + PWA + Mermaid + ドリル基盤）を複製し、JSTQB 向けにリブランドした（テーマ色を青×緑パレットに変更、`config.mts` / `docs/quiz/types.ts` を更新、ドリルの各ページを更新、模擬試験を本番準拠の 40 問・60 分・合格 65% に変更）。
 - シラバス V4.0（Version 2023 V4.0.J02）の学習目標 62 件を精読し、全 6 章 30 レッスンのカリキュラムを確定した（第1章 lesson01〜05 / 第2章 lesson06〜10 / 第3章 lesson11〜13 / 第4章 lesson14〜21 / 第5章 lesson22〜28 / 第6章 lesson29〜30）。
+- 出典・著作権表示（フッター・トップ・about ページ・README）、用語集ページ、全 30 レッスンの「準備中」スタブを整備。日本語品質チェックの `.claude` ツール（フック 3 本＋スキル 3 本）を main 単独運用向けに移植し、CI に `check:style` / `check:bold` を追加した。
+- 検証: `docs:lint` / `quiz:validate` / `check:style` / `check:bold` / `docs:build` すべて通過。main へ push 済み（Vercel 自動デプロイ想定）。
+
+**振り返り（KPT）**
+
+- Keep: 参考リポジトリの成熟した仕組みをそのまま流用でき、土台構築を 1 スプリントで完了。機械チェック（textlint/quiz-validate/check-bold/check-style）を最初から CI に組み込めた。文字ベースアイコンと OGP はレンダリング目視まで確認。
+- Problem: 並行サブエージェントとメイン作業でファイル（lesson07 スタブ）が一時競合しビルドが一度失敗。VitePress キャッシュ起因の再現性ずれもあった。
+- Try: サブエージェントの担当ファイル範囲を明示的に分離する。レッスン執筆スプリントでは Fable 生成物を必ず `docs:build` のキャッシュクリア後に検証する。
+
+**次スプリントの方向性**: Sprint 2 で lesson01（テストとは何か）を「手本レッスン」として丁寧に執筆し、以降の分量・トーン・構成の基準にする。Fable で執筆 → `natural-japanese` と `review-lesson` でレビュー → 検証 → コミット。
+
+### Sprint 2: lesson01 執筆（テストとは何か・手本レッスン）
+
+- シラバス 1.1／1.1.1／1.1.2 を出典に lesson01 を執筆（Fable）。構成: ソフトウェアテストの定義／2つの誤解（テスト実行だけ・検証だけ）／動的テストと静的テスト／テストを支える活動とスキル／典型的なテスト目的（9項目）とコンテキスト／テストとデバッグ（デバッグの流れを Mermaid で図示）／キーワード12語／試験のポイント8項目。
+- レビュー: Opus が `natural-japanese` の観点（直訳調・詩的常套句・説明の足場・文中ダッシュ・長段落）と `review-lesson` の A〜I を手動適用。用語（欠陥/故障/検証/妥当性確認）をシラバス表記に統一。Fable が申告した FACTCHECK 3件を `FACTCHECK.md` の台帳へ移送（実行以外の活動名／検証・妥当性確認の覚え方／カバレッジの定義）。
+- 検証: check-bold / check-style / check-lesson-title / textlint / docs:build すべて通過。
+- 手本の基準値: 本文約130行・Mermaid1点・キーワード表・試験のポイント。以降のレッスンはこの分量・粒度を目安にする。
