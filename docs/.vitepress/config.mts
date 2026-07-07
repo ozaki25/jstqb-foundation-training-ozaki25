@@ -54,6 +54,11 @@ export default withPwa(
           lineColor: "#475569",
           fontFamily: "sans-serif",
         },
+        // useMaxWidth を無効化し、図を固有サイズ（読める大きさ）で描画する。
+        // 有効（既定）だと狭い画面でコンテナ幅まで縮小されて文字が読めなくなるため、
+        // custom.css で図を横スクロール可能なコンテナに入れ、縮小ではなくスクロールで見せる。
+        flowchart: { useMaxWidth: false },
+        state: { useMaxWidth: false },
         // HTMLラベル(デフォルト)を使い、CJK文字の高さ計算はブラウザに委ねる。
         // SVG textで描く `htmlLabels: false` では `\n` を超える折り返しが
         // rect の高さに反映されず最終行が切れることがあるため、custom.cssで
