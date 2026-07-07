@@ -68,6 +68,9 @@ export default withPwa(
         },
       },
       themeConfig: {
+        // ナビゲーションバーに表示する短縮タイトル（<title>やSEOには上の title を使う）。
+        // 長い正式名称のままだと狭い画面で検索・ハンバーガーが押し出され横スクロールが出る。
+        siteTitle: "JSTQB FL 学習コンテンツ",
         nav: [
           { text: "ホーム", link: "/" },
           { text: "ドリル", link: "/quiz/" },
