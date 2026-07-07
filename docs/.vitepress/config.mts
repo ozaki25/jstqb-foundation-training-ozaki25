@@ -192,7 +192,7 @@ export default withPwa(
         footer: {
           message:
             '本教材は JSTQB Foundation Level シラバス（Version 2023 V4.0.J02）を参考に作成した非公式・非公認の学習コンテンツです。シラバスの著作権は ISTQB® に、日本語翻訳版の著作権は JSTQB®（Translation Copyright © 2005-2023 JSTQB®, all rights reserved）に帰属します。<a href="/about/">出典・免責について</a>',
-          copyright: "Content © 2025 ozaki25 / Syllabus © ISTQB®, JSTQB®",
+          copyright: "Content © 2026 / Syllabus © ISTQB®, JSTQB®",
         },
         search: {
           provider: "local",
