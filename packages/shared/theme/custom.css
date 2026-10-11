@@ -126,3 +126,25 @@
   color: #cccccc !important;
   fill: #cccccc !important;
 }
+
+/* ===========================================================================
+ * ドリルのボタン色（サイトごとに上書きできるよう変数にまとめる）
+ *
+ * 既定値は FL のこれまでの値。各サイトの CSS で上書きする。
+ * 白文字を載せるので、背景色は白とのコントラスト比 4.5:1 以上を保つこと。
+ *   ライト: #0b5c9c 6.94:1 / #1e3a8a 10.36:1、ダーク: #2563eb 5.17:1
+ * =========================================================================== */
+:root {
+  --quiz-action-bg: #0b5c9c;
+  --quiz-action-hover-bg: #094e86;
+  --quiz-action-focus: #7ab8e8;
+  --quiz-next-bg: #1e3a8a;
+  --quiz-next-hover-bg: #1e40af;
+  --quiz-next-focus: #93c5fd;
+}
+.dark {
+  --quiz-action-bg: #2563eb;
+  --quiz-action-hover-bg: #1d4ed8;
+  --quiz-next-bg: #2563eb;
+  --quiz-next-hover-bg: #1d4ed8;
+}

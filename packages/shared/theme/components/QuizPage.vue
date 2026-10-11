@@ -353,7 +353,9 @@ onMounted(() => {
       <a href="/quiz/">← ドリル一覧へ</a>
     </p>
 
-    <div v-if="!finished">
+    <p v-if="quizzes.length === 0" class="quiz-empty">このドリルの問題は準備中です。</p>
+
+    <div v-else-if="!finished">
       <div v-if="resumedFrom > 0" class="quiz-resume-toast" role="status" aria-live="polite">
         <span class="quiz-resume-toast-text">前回の続き、{{ resumedFrom }} 問目から再開しました</span>
         <div class="quiz-resume-toast-actions">
@@ -701,7 +703,7 @@ onMounted(() => {
 
 .btn-next:focus-visible,
 .btn-restart:focus-visible {
-  outline: 2px solid #93c5fd;
+  outline: 2px solid var(--quiz-next-focus);
   outline-offset: 2px;
 }
 
@@ -709,7 +711,7 @@ onMounted(() => {
 .btn-restart {
   min-height: 44px;
   padding: 0.65rem 1.4rem;
-  background: #1e3a8a;
+  background: var(--quiz-next-bg);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -731,20 +733,17 @@ onMounted(() => {
   color: var(--vp-c-text-3);
 }
 
+.quiz-empty {
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--vp-c-divider);
+  border-radius: 8px;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-soft);
+}
+
 .btn-next:hover,
 .btn-restart:hover {
-  background: #1e40af;
-  color: #fff;
-}
-
-.dark .btn-next,
-.dark .btn-restart {
-  background: #2563eb;
-}
-
-.dark .btn-next:hover,
-.dark .btn-restart:hover {
-  background: #1d4ed8;
+  background: var(--quiz-next-hover-bg);
   color: #fff;
 }
 

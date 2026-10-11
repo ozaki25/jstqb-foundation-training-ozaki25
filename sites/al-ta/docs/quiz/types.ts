@@ -8,6 +8,9 @@ export type ChapterMeta = BaseChapterMeta<ChapterId>;
 
 export const STORAGE_KEY = "quiz-answers";
 
+// 模擬試験の問題数（ドリル一覧のボタンと /quiz/random-N/ ページに使う）
+export const MOCK_EXAM_SIZE = 45;
+
 export const chapters: ChapterMeta[] = [
   { id: 1, title: "テストプロセスにおけるテストアナリストのタスク", lessonRange: ["lesson01", "lesson07"] },
   { id: 2, title: "リスクベースドテストにおけるテストアナリストのタスク", lessonRange: ["lesson08", "lesson09"] },

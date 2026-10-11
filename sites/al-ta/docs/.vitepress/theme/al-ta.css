@@ -48,3 +48,28 @@
   --vp-custom-block-tip-bg: rgba(11, 107, 99, 0.2);
   --vp-custom-block-tip-code-bg: rgba(11, 107, 99, 0.3);
 }
+
+/* ===========================================================================
+ * ドリルのボタン色（packages/shared の変数を AL-TA のティールで上書き）
+ * 白文字とのコントラスト比:
+ *   ライト: 一覧のボタン #0b6b63 6.37:1（hover #095750 8.43:1）
+ *           次へ・もう一度 #07423e 11.30:1（hover #095750 8.43:1）
+ *   ダーク: #0f766e 5.47:1（hover #115e59 7.58:1）
+ * フォーカス枠: ライト #0b6b63（白背景に 6.37:1）、ダーク #5eead4（背景 #1b1b1f に 11.61:1）
+ * =========================================================================== */
+:root {
+  --quiz-action-bg: #0b6b63;
+  --quiz-action-hover-bg: #095750;
+  --quiz-action-focus: #0b6b63;
+  --quiz-next-bg: #07423e;
+  --quiz-next-hover-bg: #095750;
+  --quiz-next-focus: #0b6b63;
+}
+.dark {
+  --quiz-action-bg: #0f766e;
+  --quiz-action-hover-bg: #115e59;
+  --quiz-action-focus: #5eead4;
+  --quiz-next-bg: #0f766e;
+  --quiz-next-hover-bg: #115e59;
+  --quiz-next-focus: #5eead4;
+}

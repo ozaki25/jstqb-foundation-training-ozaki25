@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { chapters, STORAGE_KEY } from '@quiz/types'
+import { chapters, STORAGE_KEY, MOCK_EXAM_SIZE } from '@quiz/types'
 import type { StoredAnswers } from '@quiz/types'
 import { quizzesByChapter } from '@quiz/data/index'
 
@@ -168,7 +168,7 @@ function resetProgress() {
       <div class="quiz-top-actions">
         <a href="/quiz/random-5/" class="btn-action btn-action-secondary">5 問だけ</a>
         <a href="/quiz/random-10/" class="btn-action btn-action-secondary">10 問だけ</a>
-        <a href="/quiz/random-40/" class="btn-action btn-action-secondary">40 問（模擬試験）</a>
+        <a :href="`/quiz/random-${MOCK_EXAM_SIZE}/`" class="btn-action btn-action-secondary">{{ MOCK_EXAM_SIZE }} 問（模擬試験）</a>
         <a href="/quiz/random/" class="btn-action">全 {{ totalQuestions }} 問から</a>
       </div>
     </div>
@@ -415,7 +415,7 @@ function resetProgress() {
 
 .btn-action {
   padding: 0.6rem 1.3rem;
-  background: #0b5c9c;
+  background: var(--quiz-action-bg);
   color: #fff;
   border-radius: 6px;
   text-decoration: none;
@@ -425,12 +425,12 @@ function resetProgress() {
 }
 
 .btn-action:hover {
-  background: #094e86;
+  background: var(--quiz-action-hover-bg);
   color: #fff;
 }
 
 .btn-action:focus-visible {
-  outline: 2px solid #7ab8e8;
+  outline: 2px solid var(--quiz-action-focus);
   outline-offset: 2px;
 }
 
@@ -442,16 +442,6 @@ function resetProgress() {
 .review-banner:focus-visible {
   outline: 2px solid #b91c1c;
   outline-offset: 2px;
-}
-
-.dark .btn-action:not(.btn-review):not(.btn-action-secondary) {
-  background: #2563eb;
-  color: #fff;
-}
-
-.dark .btn-action:not(.btn-review):not(.btn-action-secondary):hover {
-  background: #1d4ed8;
-  color: #fff;
 }
 
 .btn-action.btn-action-secondary {
