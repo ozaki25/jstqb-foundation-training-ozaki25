@@ -1,27 +1,12 @@
+import type { ChapterMeta as BaseChapterMeta } from "@jstqb/shared/quiz/types";
+
+export type { Difficulty, Quiz, StoredAnswer, StoredAnswers } from "@jstqb/shared/quiz/types";
+
 export type ChapterId = 1 | 2 | 3 | 4 | 5 | 6;
 
-export type Difficulty = "easy" | "normal" | "hard";
-
-export type Quiz = {
-  id: string;
-  lesson: string;
-  difficulty: Difficulty;
-  question: string;
-  choices: [string, string, string, string];
-  answer: 0 | 1 | 2 | 3;
-  explanation: string;
-};
+export type ChapterMeta = BaseChapterMeta<ChapterId>;
 
 export const STORAGE_KEY = "quiz-answers";
-
-export type StoredAnswer = { correct: boolean; ts: number; selectedIndex?: number | null };
-export type StoredAnswers = Record<string, StoredAnswer>;
-
-export type ChapterMeta = {
-  id: ChapterId;
-  title: string;
-  lessonRange: [string, string];
-};
 
 export const chapters: ChapterMeta[] = [
   { id: 1, title: "テストの基礎", lessonRange: ["lesson01", "lesson05"] },

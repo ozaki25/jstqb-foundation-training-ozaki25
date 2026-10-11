@@ -1,6 +1,6 @@
 ---
 name: add-lesson
-description: JSTQB Foundation Level 学習コンテンツに新しいレッスンを追加する。main ブランチ上で docs/lessons/lessonNN/ にコンテンツを作成し、サイドバー確認・ビルド確認まで行う。
+description: JSTQB Foundation Level 学習コンテンツに新しいレッスンを追加する。main ブランチ上で sites/<site>/docs/lessons/lessonNN/ にコンテンツを作成し、サイドバー確認・ビルド確認まで行う。
 argument-hint: <lessonNN> <テーマ> <シラバス該当箇所>
 ---
 
@@ -25,17 +25,17 @@ git status
 git pull origin main
 ```
 
-main ブランチ上で作業する。draft ブランチや `docs/drafts/` は使わない。
+main ブランチ上で作業する。draft ブランチや `sites/<site>/docs/drafts/` は使わない。
 
 ### 2. レッスン番号を確定
 
-`docs/lessons/` 配下の既存レッスンと `docs/.vitepress/config.mts` のサイドバーを確認し、対象の `lessonNN`（NN はゼロ埋め2桁、lesson01〜lesson30）が未作成であることを確認する。
+`sites/<site>/docs/lessons/` 配下の既存レッスンと `sites/<site>/docs/.vitepress/config.mts` のサイドバーを確認し、対象の `lessonNN`（NN はゼロ埋め2桁、lesson01〜lesson30）が未作成であることを確認する。
 
 ```bash
-ls docs/lessons/
+ls sites/<site>/docs/lessons/
 ```
 
-サイドバーには全30レッスンの章立て・仮タイトルが既に登録されている想定なので、対象の番号がどの章・どのテーマに割り当てられているかを `docs/.vitepress/config.mts` で確認する。
+サイドバーには全30レッスンの章立て・仮タイトルが既に登録されている想定なので、対象の番号がどの章・どのテーマに割り当てられているかを `sites/<site>/docs/.vitepress/config.mts` で確認する。
 
 ### 3. 必須インプット: シラバス該当箇所の確認
 
@@ -53,7 +53,7 @@ ls docs/lessons/
 
 ### 5. レッスンファイルの作成
 
-`docs/lessons/lessonNN/index.md` を作成します。
+`sites/<site>/docs/lessons/lessonNN/index.md` を作成します。
 
 レッスンは以下の構成で、**15分程度で読み切れるボリューム**にしてください。
 
@@ -91,7 +91,7 @@ ls docs/lessons/
 
 ### 6. サイドバーの確認・更新
 
-`docs/.vitepress/config.mts` の `themeConfig.sidebar["/lessons/"]` を確認する。
+`sites/<site>/docs/.vitepress/config.mts` の `themeConfig.sidebar["/lessons/"]` を確認する。
 
 - 対象 `lessonNN` の項目が既に該当する章にプレースホルダーとして存在する場合は、テーマ名が実際に書いた内容と一致しているか確認し、必要なら文言を修正する
 - 存在しない場合（章立てを変更した、または計画外のレッスンを追加した場合）は、適切な章の `items` に追加する
@@ -105,10 +105,10 @@ ls docs/lessons/
 以下をすべて実行し、通ることを確認する。
 
 ```bash
-node .claude/hooks/check-lesson-title.js docs/lessons/lessonNN/index.md
-node .claude/hooks/check-style.js docs/lessons/lessonNN/index.md
-node .claude/hooks/check-bold.js docs/lessons/lessonNN/index.md
-npm run docs:build
+node .claude/hooks/check-lesson-title.js sites/<site>/docs/lessons/lessonNN/index.md
+node .claude/hooks/check-style.js sites/<site>/docs/lessons/lessonNN/index.md
+node .claude/hooks/check-bold.js sites/<site>/docs/lessons/lessonNN/index.md
+npm run docs:build -w sites/<site>
 ```
 
 エラーや指摘があれば修正し、再度実行して確認する。可能であれば `review-lesson` スキルでレッスン単位のレビューも行う。

@@ -2,8 +2,8 @@
 // markdown-it は全角約物（（）「」など）に隣接した ** を強調として開閉しないため、
 // 正規表現では取りこぼす崩れがある。レンダリング後に ** が残った行を報告する。
 // 使い方（どちらも可）:
-//   cat docs/drafts/XXX/index.md | node .claude/hooks/check-bold.js
-//   node .claude/hooks/check-bold.js docs/drafts/XXX/index.md [別のファイル...]
+//   cat sites/<site>/docs/drafts/XXX/index.md | node .claude/hooks/check-bold.js
+//   node .claude/hooks/check-bold.js sites/<site>/docs/drafts/XXX/index.md [別のファイル...]
 // 崩れがあれば該当行を出力し exit 1。
 const MarkdownIt = require("markdown-it");
 const md = new MarkdownIt();

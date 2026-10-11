@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { chapters, STORAGE_KEY } from '../../../quiz/types'
-import type { StoredAnswers } from '../../../quiz/types'
-import { quizzesByChapter } from '../../../quiz/data/index'
+import { chapters, STORAGE_KEY } from '@quiz/types'
+import type { StoredAnswers } from '@quiz/types'
+import { quizzesByChapter } from '@quiz/data/index'
 
 const stored = ref<StoredAnswers>({})
 

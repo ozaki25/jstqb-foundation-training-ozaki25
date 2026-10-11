@@ -1,6 +1,6 @@
 ---
 name: review-lesson
-description: レッスン（docs/lessons/lessonNN）を、JSTQB/ISTQB シラバスとの整合性および蓄積された品質観点でチェックリスト方式でレビューする。指摘ゼロになるまで「チェック→修正→再ビルド→再チェック」をループで回す。場当たりレビューを禁止し、全項目を毎回必ず通す。
+description: レッスン（sites/<site>/docs/lessons/lessonNN）を、JSTQB/ISTQB シラバスとの整合性および蓄積された品質観点でチェックリスト方式でレビューする。指摘ゼロになるまで「チェック→修正→再ビルド→再チェック」をループで回す。場当たりレビューを禁止し、全項目を毎回必ず通す。
 argument-hint: <レッスンのID（例: lesson07）>
 ---
 
@@ -24,13 +24,13 @@ argument-hint: <レッスンのID（例: lesson07）>
 
 ## レビューのループ（仕組み）
 
-1 本のレッスン（`docs/lessons/lessonNN/index.md`）について、次を**指摘ゼロになるまで繰り返す**:
+1 本のレッスン（`sites/<site>/docs/lessons/lessonNN/index.md`）について、次を**指摘ゼロになるまで繰り返す**:
 
 ```
 ① 対象ファイルを最初から最後まで通読する
 ② 下のチェックリストを A→I の順に全項目チェックし、指摘を箇条書きで列挙する
 ③ 指摘を修正する
-④ npm run docs:build でビルドが通ることを確認する
+④ npm run docs:build -w sites/<site> でビルドが通ることを確認する
 ⑤ ②に戻る。指摘が出なくなったら、その時点で1周「指摘なし」を確認して終了
 ```
 
@@ -104,12 +104,12 @@ argument-hint: <レッスンのID（例: lesson07）>
 
 ### I. ビルド・機械チェック
 
-- `npm run docs:build` が通るか
-- `npm run docs:lint`（textlint）が通るか
-- `npm run quiz:validate` が関連する場合は通るか
-- **`node .claude/hooks/check-style.js docs/lessons/lessonNN/index.md` で型の欠陥（試験のポイント・学ぶことの複文、詩的見出し、全角記号 ＝＋、足場フレーズ）を機械検出したか**。候補が出たら引用・固有名詞・シラバス上の正当な表記かを人が判断して、該当すれば直す（無引数で `docs/lessons` 配下の全 index.md を一括スキャンできる）
-- **`node .claude/hooks/check-lesson-title.js docs/lessons/lessonNN/index.md` で h1 がファイル名の lessonNN と一致した形式か確認したか**
-- **太字 `**` が素通りしていないか**。markdown-it は全角約物（（）「」など）に隣接した `**` を、文中（前後が日本語）にあるとき太字にしないため、目視では気づけない。`node .claude/hooks/check-bold.js docs/lessons/lessonNN/index.md` で検査し、出力が空であることを確認する。崩れたら約物を `**` の外に出す（例: `**目次（一覧）**` → `**目次**（一覧）`）
+- `npm run docs:build -w sites/<site>` が通るか
+- `npm run docs:lint -w sites/<site>`（textlint）が通るか
+- `npm run quiz:validate -w sites/<site>` が関連する場合は通るか
+- **`node .claude/hooks/check-style.js sites/<site>/docs/lessons/lessonNN/index.md` で型の欠陥（試験のポイント・学ぶことの複文、詩的見出し、全角記号 ＝＋、足場フレーズ）を機械検出したか**。候補が出たら引用・固有名詞・シラバス上の正当な表記かを人が判断して、該当すれば直す（無引数で `sites/<site>/docs/lessons` 配下の全 index.md を一括スキャンできる）
+- **`node .claude/hooks/check-lesson-title.js sites/<site>/docs/lessons/lessonNN/index.md` で h1 がファイル名の lessonNN と一致した形式か確認したか**
+- **太字 `**` が素通りしていないか**。markdown-it は全角約物（（）「」など）に隣接した `**` を、文中（前後が日本語）にあるとき太字にしないため、目視では気づけない。`node .claude/hooks/check-bold.js sites/<site>/docs/lessons/lessonNN/index.md` で検査し、出力が空であることを確認する。崩れたら約物を `**` の外に出す（例: `**目次（一覧）**` → `**目次**（一覧）`）
 
 ## 出力フォーマット
 

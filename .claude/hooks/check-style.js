@@ -5,8 +5,8 @@
 //   3) 本文に全角記号 ＝ ＋（「A は B」「A に B を足す」と言葉で書く）
 //   4) 足場フレーズ（「今日は〜見ていきます」「結論から言うと」など）
 //   5) 短い見出し（## 以降）に読点「、」や全角丸括弧「（）」（中身を表す名詞句にする）
-// 使い方: node .claude/hooks/check-style.js docs/lessons/lesson07/index.md [...]
-//         省略時は docs/lessons 配下の全 index.md を対象にする。
+// 使い方: node .claude/hooks/check-style.js sites/<site>/docs/lessons/lesson07/index.md [...]
+//         省略時はカレントの docs/lessons と sites/*/docs/lessons 配下の全 index.md を対象にする。
 // 検出は「候補」。引用の格言・概念語など正当なものは人が判断して除外する。
 const fs = require("fs");
 const path = require("path");
@@ -15,10 +15,21 @@ const path = require("path");
 const POETIC = ["正体", "裏側", "命を吹き込む", "の鍵", "の秘密", "魔法", "旅", "世界", "扉", "真実"];
 const SCAFFOLD = ["結論から言うと", "まず全体像", "を見ていきます", "という地図", "大きく2つ", "大きく3つ"];
 
+// 引数がディレクトリなら配下の lessonNN/index.md を対象にする。
+// 省略時はカレントの docs/lessons と、モノレポ各サイトの sites/*/docs/lessons を対象にする。
 function collectTargets(args) {
-  if (args.length) return args;
-  const dirs = ["docs/lessons"];
+  let dirs = [];
   const out = [];
+  for (const a of args) {
+    if (fs.existsSync(a) && fs.statSync(a).isDirectory()) dirs.push(a);
+    else out.push(a);
+  }
+  if (!args.length) {
+    dirs = ["docs/lessons"];
+    if (fs.existsSync("sites")) {
+      for (const site of fs.readdirSync("sites")) dirs.push(path.join("sites", site, "docs/lessons"));
+    }
+  }
   for (const d of dirs) {
     if (!fs.existsSync(d)) continue;
     for (const name of fs.readdirSync(d)) {

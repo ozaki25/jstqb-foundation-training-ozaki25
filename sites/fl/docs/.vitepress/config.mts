@@ -3,6 +3,9 @@ import { withMermaid } from "vitepress-plugin-mermaid";
 import { withPwa } from "@vite-pwa/vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import cjkFriendly from "markdown-it-cjk-friendly";
+import { fileURLToPath } from "node:url";
+import { join } from "node:path";
+import { gitLastUpdated } from "@jstqb/shared/vitepress/git-last-updated.mjs";
 
 export default withPwa(
   withMermaid(
@@ -13,6 +16,16 @@ export default withPwa(
       lang: "ja",
       lastUpdated: true,
       cleanUrls: true,
+      transformPageData(pageData, { siteConfig }) {
+        const ts = gitLastUpdated(join(siteConfig.srcDir, pageData.relativePath));
+        if (ts) pageData.lastUpdated = ts;
+      },
+      vite: {
+        resolve: {
+          // 共通ドリル部品（packages/shared）がこのサイトの問題データを読むための入口
+          alias: { "@quiz": fileURLToPath(new URL("../quiz", import.meta.url)) },
+        },
+      },
       head: [
         ["link", { rel: "icon", href: "/favicon.ico", sizes: "48x48" }],
         ["link", { rel: "icon", href: "/logo.svg", type: "image/svg+xml" }],

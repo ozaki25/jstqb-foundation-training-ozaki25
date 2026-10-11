@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import type { Quiz, ChapterId } from '../../../quiz/types'
-import { STORAGE_KEY, chapters } from '../../../quiz/types'
-import type { StoredAnswer, StoredAnswers } from '../../../quiz/types'
+import type { Quiz, ChapterId } from '@quiz/types'
+import { STORAGE_KEY, chapters } from '@quiz/types'
+import type { StoredAnswer, StoredAnswers } from '@quiz/types'
 import QuizCard from './QuizCard.vue'
 
 const props = defineProps<{

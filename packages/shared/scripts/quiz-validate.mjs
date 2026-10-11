@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 import { readdirSync, existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { resolve } from "node:path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(__dirname, "..");
-const lessonsDir = resolve(repoRoot, "docs/lessons");
-const dataDir = resolve(repoRoot, "docs/quiz/data");
+// 使い方: node packages/shared/scripts/quiz-validate.mjs <サイトのディレクトリ>
+// 例:     node packages/shared/scripts/quiz-validate.mjs sites/fl
+// 省略時はカレントディレクトリをサイトとみなす。
+const siteDir = resolve(process.argv[2] ?? process.cwd());
+const lessonsDir = resolve(siteDir, "docs/lessons");
+const dataDir = resolve(siteDir, "docs/quiz/data");
 
 const validDifficulties = new Set(["easy", "normal", "hard"]);
 const idPattern = /^q\d{3,4}$/;
@@ -23,7 +24,20 @@ let totalCount = 0;
 const perChapter = {};
 const perDifficulty = { easy: 0, normal: 0, hard: 0 };
 
-for (let ch = 1; ch <= 6; ch++) {
+// docs/quiz/data/chapterN.ts を章番号順に検証する（章数はサイトごとに異なる）
+const chapterNums = readdirSync(dataDir)
+  .map((f) => /^chapter(\d+)\.ts$/.exec(f)?.[1])
+  .filter(Boolean)
+  .map(Number)
+  .sort((a, b) => a - b);
+if (chapterNums.length === 0) {
+  errors.push(`no chapterN.ts found in ${dataDir}`);
+}
+chapterNums.forEach((n, i) => {
+  if (n !== i + 1) errors.push(`chapter files are not contiguous from 1 (found chapter${n}.ts at position ${i + 1})`);
+});
+
+for (const ch of chapterNums) {
   const file = resolve(dataDir, `chapter${ch}.ts`);
   if (!existsSync(file)) {
     errors.push(`[chapter${ch}] file missing: ${file}`);
@@ -92,7 +106,7 @@ for (let ch = 1; ch <= 6; ch++) {
 
 console.log("=== Quiz validation ===");
 console.log(`Total: ${totalCount} questions`);
-for (let ch = 1; ch <= 6; ch++) {
+for (const ch of chapterNums) {
   console.log(`  chapter${ch}: ${perChapter[ch] ?? 0}`);
 }
 console.log(

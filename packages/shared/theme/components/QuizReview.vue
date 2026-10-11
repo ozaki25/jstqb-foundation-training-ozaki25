@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { STORAGE_KEY } from '../../../quiz/types'
-import { allQuizzes } from '../../../quiz/data/index'
+import { STORAGE_KEY } from '@quiz/types'
+import { allQuizzes } from '@quiz/data/index'
 import QuizPage from './QuizPage.vue'
 
 const loaded = ref(false)

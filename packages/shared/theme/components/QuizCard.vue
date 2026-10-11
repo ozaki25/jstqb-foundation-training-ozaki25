@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import type { Quiz } from '../../../quiz/types'
+import type { Quiz } from '@quiz/types'
 
 const props = defineProps<{
   quiz: Quiz

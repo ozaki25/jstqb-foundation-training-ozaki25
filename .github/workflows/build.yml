@@ -1,7 +1,7 @@
 name: VitePress Build Check
 
 # Vercel 本番デプロイと同じ内容のビルドを main と PR で走らせて、
-# 公開前にビルドエラーを止める。
+# 公開前にビルドエラーを止める。サイトごとに並列で検証する。
 
 on:
   push:
@@ -13,10 +13,17 @@ on:
 
 jobs:
   build:
-    name: Build docs
+    name: Build ${{ matrix.site }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        site: [fl]
     steps:
       - uses: actions/checkout@v4
+        with:
+          # lastUpdated をリネーム越しに git 履歴から取るため全履歴を取得する
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -27,16 +34,16 @@ jobs:
         run: npm ci
 
       - name: Lint docs (textlint)
-        run: npm run docs:lint
+        run: npm run docs:lint -w sites/${{ matrix.site }}
 
       - name: Validate quiz data
-        run: npm run quiz:validate
+        run: npm run quiz:validate -w sites/${{ matrix.site }}
 
       - name: Check lesson style
-        run: npm run check:style
+        run: npm run check:style -w sites/${{ matrix.site }}
 
       - name: Check bold rendering
-        run: npm run check:bold
+        run: npm run check:bold -w sites/${{ matrix.site }}
 
       - name: Build VitePress site
-        run: npm run docs:build
+        run: npm run docs:build -w sites/${{ matrix.site }}

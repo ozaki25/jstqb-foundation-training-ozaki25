@@ -14,7 +14,7 @@
 // runner は *テストブロックごとに fresh browser を launch→finallyでclose* する。
 // helpers 側はグローバルなブラウザ状態を持たない。
 
-import pwpkg from '../node_modules/playwright-core/index.js'
+import pwpkg from 'playwright-core'
 const chromium = pwpkg.chromium
 
 const BASE = process.env.E2E_BASE || 'http://localhost:4173'
@@ -31,7 +31,7 @@ async function resolveExecutablePath() {
     /* not installed — fall through to sparticuz */
   }
   // 2) Fall back to the bundled @sparticuz/chromium.
-  const sparticuz = (await import('../node_modules/@sparticuz/chromium/build/index.js')).default
+  const sparticuz = (await import('@sparticuz/chromium')).default
   const execPath = await sparticuz.executablePath()
   return { executablePath: execPath, extraArgs: sparticuz.args }
 }

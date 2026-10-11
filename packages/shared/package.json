@@ -1,0 +1,13 @@
+{
+  "name": "@jstqb/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "JSTQB 学習コンテンツ各サイトで共有するテーマ・ドリル部品・検証スクリプト",
+  "exports": {
+    "./theme": "./theme/index.ts",
+    "./quiz/types": "./quiz/types.ts",
+    "./scripts/*": "./scripts/*",
+    "./vitepress/*": "./vitepress/*"
+  }
+}
