@@ -99,10 +99,41 @@
   max-width: 100%;
   height: auto; /* 固有の縦横比を保つ */
 }
-/* スマホ: 縮小すると文字が読めないため、固有サイズで描画し横スクロールで見せる。 */
+/* スマホ: 縮小すると文字が読めないため、固有サイズで描画し横スクロールで見せる。
+ * はみ出した側の端に影を出し、横にスクロールできることを伝える
+ * （background-attachment: local の覆いが端まで来ると影が消える、CSS だけの手法）。 */
 @media (max-width: 640px) {
   .vp-doc .mermaid svg {
     max-width: none;
+  }
+  .vp-doc .mermaid {
+    background:
+      linear-gradient(to right, var(--vp-c-bg) 30%, transparent) left center / 32px 100% no-repeat local,
+      linear-gradient(to left, var(--vp-c-bg) 30%, transparent) right center / 32px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.25), transparent) left center / 12px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.25), transparent) right center / 12px 100% no-repeat scroll;
+  }
+  .dark .vp-doc .mermaid {
+    background:
+      linear-gradient(to right, var(--vp-c-bg) 30%, transparent) left center / 32px 100% no-repeat local,
+      linear-gradient(to left, var(--vp-c-bg) 30%, transparent) right center / 32px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, rgba(255, 255, 255, 0.3), transparent) left center / 12px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, rgba(255, 255, 255, 0.3), transparent) right center / 12px 100% no-repeat scroll;
+  }
+}
+
+/* ===========================================================================
+ * スマホでの表の列幅
+ *
+ * VitePress の表は画面幅に収めようとして列を縮める。日本語はどの文字の間でも
+ * 改行できるため、文の長い列に押されて見出し列が 1 文字幅まで縮み、縦に
+ * 1 文字ずつ並んで読めなくなる。セルに最小幅を持たせ、収まらない表は
+ * 縮めずに横スクロールさせる（表は VitePress 標準でスクロール可能）。
+ * =========================================================================== */
+@media (max-width: 640px) {
+  .vp-doc th,
+  .vp-doc td {
+    min-width: 5.5em;
   }
 }
 
@@ -119,6 +150,23 @@
  * ID スコープで詳細度が高いため、!important で上書きして固定の淡色に
  * する（flowchart が既に使っている色と合わせ、図の種類間で見た目を統一）。
  * =========================================================================== */
+/* ダークモードでは線・矢印と subgraph の背景も暗い背景に溶けるため、明るい色に固定する。 */
+.dark .mermaid .flowchart-link,
+.dark .mermaid .edgePath .path,
+.dark .mermaid .transition {
+  stroke: #94a3b8 !important;
+}
+.dark .mermaid marker path,
+.dark .mermaid .arrowheadPath,
+.dark .mermaid .arrowMarkerPath {
+  fill: #94a3b8 !important;
+  stroke: #94a3b8 !important;
+}
+.dark .mermaid .cluster rect {
+  fill: #1e2330 !important;
+  stroke: #64748b !important;
+}
+
 .dark .mermaid .nodeLabel,
 .dark .mermaid .cluster-label,
 .dark .mermaid .state-title,

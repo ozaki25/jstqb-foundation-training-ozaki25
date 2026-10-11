@@ -83,6 +83,9 @@ export default withPwa(
           primaryTextColor: "#1e293b",
           primaryBorderColor: BRAND_COLOR,
           lineColor: "#475569",
+          // subgraph の背景（既定の黄色は本文の配色と合わないため淡い灰色にする）
+          clusterBkg: "#f8fafc",
+          clusterBorder: "#94a3b8",
           fontFamily: "sans-serif",
         },
         // useMaxWidth を無効化し、図を固有サイズ（読める大きさ）で描画する。
