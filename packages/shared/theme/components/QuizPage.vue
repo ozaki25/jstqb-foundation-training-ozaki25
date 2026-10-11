@@ -11,6 +11,9 @@ const props = defineProps<{
   shuffle?: boolean
   chapter?: ChapterId
   randomSample?: number
+  // レッスンのグループごとの出題数（模擬試験で本番の配分を再現する）。randomSample と併用し、
+  // グループの問題が足りないときは残りの問題から補う。
+  quotaGroups?: { lessons: string[]; count: number }[]
   hideReviewCta?: boolean
 }>()
 
@@ -64,7 +67,9 @@ function sampleQuizzes(force = false): Quiz[] {
   }
 
   let result: Quiz[]
-  if (props.randomSample != null && props.randomSample > 0) {
+  if (props.randomSample != null && props.randomSample > 0 && props.quotaGroups) {
+    result = sampleByQuotaGroups(props.randomSample, props.quotaGroups)
+  } else if (props.randomSample != null && props.randomSample > 0) {
     result = shuffleArray(props.quizzes).slice(0, props.randomSample)
   } else if (props.shuffle) {
     result = shuffleArray(props.quizzes)
@@ -73,6 +78,22 @@ function sampleQuizzes(force = false): Quiz[] {
   }
   saveSampleIds(result)
   return result
+}
+
+function sampleByQuotaGroups(total: number, groups: { lessons: string[]; count: number }[]): Quiz[] {
+  const picked: Quiz[] = []
+  const used = new Set<string>()
+  for (const g of groups) {
+    const pool = shuffleArray(props.quizzes.filter((q) => g.lessons.includes(q.lesson)))
+    for (const q of pool.slice(0, g.count)) {
+      picked.push(q)
+      used.add(q.id)
+    }
+  }
+  const rest = props.quizzes.filter((q) => !used.has(q.id))
+  const shortfall = Math.min(total, props.quizzes.length) - picked.length
+  if (shortfall > 0) picked.push(...shuffleArray(rest).slice(0, shortfall))
+  return shuffleArray(picked).slice(0, total)
 }
 
 function chapterIdFromLesson(lesson: string): ChapterId | null {
