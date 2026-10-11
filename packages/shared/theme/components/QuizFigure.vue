@@ -78,7 +78,7 @@ onUnmounted(() => {
       <!-- はみ出す表はキーボードでもスクロールできるよう tabindex を付けたスクロール領域にする -->
       <div
         ref="scroller"
-        class="table-scroll"
+        class="table-scroll quiz-figure-table"
         :tabindex="overflowing ? 0 : undefined"
         :role="overflowing ? 'region' : undefined"
         :aria-label="overflowing ? figure.caption : undefined"
