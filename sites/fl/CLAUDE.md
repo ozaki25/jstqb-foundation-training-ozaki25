@@ -80,7 +80,15 @@
 | lesson29 | テストツールの種類と支援 | 6.1 |
 | lesson30 | テスト自動化の利点とリスク | 6.2 |
 
-カリキュラムを変更するときは、`sites/fl/docs/.vitepress/config.mts`（サイドバー）・`sites/fl/docs/index.md`（目次）・`sites/fl/docs/quiz/types.ts`（章メタ）・`sites/fl/README.md`（章対応表）・この表の 5 か所を必ず同期させる。ルート `README.md` の FL の項（章・レッスン数の記述）も確認する。
+カリキュラムを変更するときは、次の 5 か所を必ず同期させる。
+
+- `sites/fl/docs/.vitepress/config.mts`（サイドバー）
+- `sites/fl/docs/index.md`（目次）
+- `sites/fl/docs/quiz/types.ts`（章メタ）
+- `sites/fl/README.md`（章対応表）
+- この `sites/fl/CLAUDE.md` の表
+
+ルート `README.md` のサイト一覧（章・レッスン数の記述）も確認する。
 
 ## 用語の統一ルール（重要）
 

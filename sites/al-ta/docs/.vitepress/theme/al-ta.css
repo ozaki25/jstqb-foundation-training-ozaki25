@@ -1,0 +1,50 @@
+/**
+ * AL-TA サイトのブランドカラー上書き
+ * Primary: 深いティール (#0b6b63)
+ * FL サイトの青 (#0b5c9c) と見分けがつくよう、Advanced Level は落ち着いた深緑・ティール系にする。
+ * 共通 CSS（packages/shared/theme/custom.css）は変更せず、同じ変数をここで上書きする。
+ * すべてのテキスト色・ボタンは WCAG AA (4.5:1) 以上を満たす（比は相対輝度から算出）。
+ *
+ * コントラスト比（ライト: 白背景 #ffffff 対象）
+ *   brand-1  #0b6b63: 6.37:1 ✅（本文リンク）
+ *   brand-2  #095750: 8.43:1 ✅
+ *   brand-3  #07423e: 11.30:1 ✅
+ *   白文字 on #0b6b63: 6.37:1 ✅（ボタン）
+ *   brand-1 on brand-soft（rgba(11,107,99,.12) を白 / #f6f6f7 / #f1f1f2 に重ねた色）:
+ *     5.32:1 / 4.95:1 / 4.76:1 ✅
+ *   tip ブロック（背景 #e0f2ef）: 文字 #07423e 9.75:1 ✅、brand-1 5.49:1 ✅
+ *
+ * コントラスト比（ダーク: 背景 #1b1b1f 対象）
+ *   brand-1  #5eead4: 11.61:1 ✅（本文リンク）
+ *   brand-2  #99f6e4: 13.62:1 ✅
+ *   brand-3  #ccfbf1: 15.24:1 ✅
+ *   brand-1 on brand-soft（rgba(94,234,212,.16) を #1b1b1f に重ねた色）: 7.91:1 ✅
+ *   tip ブロック（背景 rgba(11,107,99,.20)）: 文字 #ccfbf1 13.10:1 ✅
+ *   ボタン: ライトと同じ白文字 on #0b6b63 6.37:1 ✅（共通 CSS はダークでもボタン色を上書きしない）
+ */
+
+:root {
+  --vp-c-brand-1: #0b6b63;
+  --vp-c-brand-2: #095750;
+  --vp-c-brand-3: #07423e;
+  --vp-c-brand-soft: rgba(11, 107, 99, 0.12);
+
+  --vp-button-brand-bg: #0b6b63;
+  --vp-button-brand-hover-bg: #095750;
+  --vp-button-brand-active-bg: #07423e;
+
+  --vp-custom-block-tip-text: #07423e;
+  --vp-custom-block-tip-bg: #e0f2ef;
+  --vp-custom-block-tip-code-bg: rgba(11, 107, 99, 0.14);
+}
+
+.dark {
+  --vp-c-brand-1: #5eead4;
+  --vp-c-brand-2: #99f6e4;
+  --vp-c-brand-3: #ccfbf1;
+  --vp-c-brand-soft: rgba(94, 234, 212, 0.16);
+
+  --vp-custom-block-tip-text: #ccfbf1;
+  --vp-custom-block-tip-bg: rgba(11, 107, 99, 0.2);
+  --vp-custom-block-tip-code-bg: rgba(11, 107, 99, 0.3);
+}

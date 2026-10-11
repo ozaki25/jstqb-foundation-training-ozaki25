@@ -1,16 +1,42 @@
-# JSTQB Foundation Level 学習コンテンツ
+# JSTQB 学習コンテンツ（モノレポ）
+
+JSTQB（日本ソフトウェアテスト資格認定委員会）の資格の合格を目指す、**非公式・非公認**の学習コンテンツを管理するモノレポです。資格ごとに 1 つのサイトを `sites/` に置き、ドリルの部品やテーマなどの共通部分は `packages/shared/` で共有します。
+
+## 出典・著作権表示
+
+各教材は、それぞれ対応するシラバスを参考にした派生著作物です。教材ごとの表示は次のとおりです。
+
+### Foundation Level
 
 > 本教材は、JSTQB Foundation Level シラバス（Version 2023 V4.0.J02）を参考に作成した**非公式**の学習コンテンツです。シラバスの著作権は International Software Testing Qualifications Board（ISTQB®）に、日本語翻訳版の著作権は Japan Software Testing Qualifications Board（JSTQB®）に帰属します（Translation Copyright © 2005-2023 JSTQB®, all rights reserved）。本教材は ISTQB®／JSTQB® が承認・公認したものではありません。正確な内容は必ず公式シラバス（<https://www.jstqb.jp/syllabus/>）をご確認ください。
 
-JSTQB Foundation Level（テスト技術者資格）の合格を目指す学習コンテンツです。
+### Advanced Level テストアナリスト
 
-全 6 章 30 レッスンで構成し、1 レッスン 1 トピックで段階的に学べるようにしています。
+> 本教材は、JSTQB Advanced Level シラバス テストアナリスト（Version 4.0.J01）を参考に作成した非公式の学習コンテンツです。シラバスの著作権は ISTQB® に、日本語翻訳版の著作権は JSTQB®（Translation Copyright © 2005-2026 JSTQB®, all rights reserved）に帰属します。本教材は ISTQB®／JSTQB® が承認・公認したものではありません。
 
-## コンテンツ
+## サイト一覧
 
-- **30 レッスン**: 公式シラバス（Version 2023 V4.0.J02）の全6章に対応。図解・試験のポイント付き。用語定義は用語集に集約
-- **ドリル 186 問**: 章別出題・ランダム（5/10問）・本番形式の模擬試験（40問）・復習に対応。回答履歴をブラウザに保存
-- 試験形式: 40問・60分・合格ライン65%（40問中26問）・K1〜K3レベル
+| サイト | 対象資格 | ディレクトリ | 状態 |
+|---|---|---|---|
+| FL | JSTQB Foundation Level（全 6 章 30 レッスン・ドリル 186 問） | [`sites/fl/`](./sites/fl/) | 公開中 |
+| AL-TA | JSTQB Advanced Level テストアナリスト（全 5 章 30 レッスン） | [`sites/al-ta/`](./sites/al-ta/) | 準備中 |
+
+各サイトの詳細は、サイトのディレクトリにある `README.md` と `CLAUDE.md` を参照してください。
+
+## リポジトリの構成
+
+```
+package.json                   workspaces と横断スクリプト
+vercel.json                    FL の既存 Vercel プロジェクト用の設定
+CLAUDE.md                      モノレポ共通の方針（執筆スタイル・図版・ドリル・運用ルール）
+PLAYBOOK.md                    新サイトの立ち上げと公開後の運用手順
+.github/workflows/build.yml    サイト別のビルド・lint・ドリル検証
+.claude/                       品質チェック用のフックとスキル
+references/                    非公開の一次資料（git 管理外）
+packages/shared/               全サイト共通の部品（ドリルの Vue 部品・テーマ CSS・問題の型・検証スクリプト）
+sites/fl/                      Foundation Level 教材
+sites/al-ta/                   Advanced Level テストアナリスト教材
+```
 
 ## 技術スタック
 
@@ -20,65 +46,38 @@ JSTQB Foundation Level（テスト技術者資格）の合格を目指す学習�
 - markdown-it-cjk-friendly — 日本語の強調記法の表示崩れ対策
 - textlint（`preset-ja-technical-writing`）— 日本語文章の校正
 - Vue 3 — ドリルのカスタムコンポーネント
+- npm workspaces — モノレポ
 - Vercel — ホスティング
-- GitHub Actions — `main` と PR でビルド・lint・ドリル検証
+- GitHub Actions — `main` と PR でサイト別にビルド・lint・ドリル検証
 
-## クイックスタート
+## 開発コマンド
 
-```bash
-npm install
-npm run docs:dev   # 開発サーバー http://localhost:5173
-```
-
-## 主なコマンド
+リポジトリのルートで実行します。サイトを指定するときは `-w sites/<site>` を付けます（例: `-w sites/fl`）。
 
 ```bash
-npm run docs:dev       # ローカル開発サーバー
-npm run docs:build     # 本番ビルド
-npm run docs:preview   # ビルド結果のプレビュー
-npm run docs:lint      # textlint で日本語を校正
-npm run quiz:validate  # ドリルデータの検証
-npm run pwa:icons      # logo.svg から PWA アイコンを生成
+npm install                            # 依存関係のインストール（全 workspace）
+
+npm run docs:dev -w sites/fl           # 開発サーバー http://localhost:5173
+npm run docs:build -w sites/fl         # 本番ビルド
+npm run docs:lint -w sites/fl          # textlint で日本語を校正
+npm run quiz:validate -w sites/fl      # ドリルデータの検証
+
+npm run docs:build                     # 全サイトをビルド
+npm run docs:lint                      # 全サイトを lint
+npm run quiz:validate                  # 全サイトのドリルを検証
+
+npm run fl:dev                         # FL のショートカット（fl:build / fl:preview / fl:test:e2e もあり）
 ```
-
-## ディレクトリ構成
-
-```
-docs/
-  index.md                     トップページ
-  lessons/lessonNN/index.md    各レッスン（lesson01〜lesson30）
-  quiz/                        ドリル（4 択問題）
-    types.ts                   型定義・章メタ情報
-    data/chapterN.ts           章ごとの問題データ
-    chapterN/index.md          章別ドリルページ
-    random/ random-5/ random-10/ random-40/ review/   ランダム・模擬試験（40問）・復習ページ
-  glossary/                    用語集ページ
-  about/                       出典・免責ページ
-  public/                      アイコン・OGP画像等
-  .vitepress/
-    config.mts                 サイト設定（nav・サイドバー・PWA・SEO）
-    theme/                     カスタムテーマ・Vue コンポーネント
-scripts/quiz-validate.mjs      ドリルデータの検証スクリプト
-```
-
-## 章とレッスンの対応
-
-| 章 | テーマ | レッスン |
-|----|--------|----------|
-| 1 | テストの基礎 | lesson01〜05 |
-| 2 | ソフトウェア開発ライフサイクル全体を通してのテスト | lesson06〜10 |
-| 3 | 静的テスト | lesson11〜13 |
-| 4 | テスト分析と設計 | lesson14〜21 |
-| 5 | テスト活動のマネジメント | lesson22〜28 |
-| 6 | テストツール | lesson29〜30 |
 
 ## レッスン・ドリルの追加方法
 
-詳細は [`CLAUDE.md`](./CLAUDE.md) を参照してください。執筆スタイル・用語統一ルール・図版作成のガイドラインが記載されています。
+共通の方針は [`CLAUDE.md`](./CLAUDE.md)、サイト固有の方針は `sites/<site>/CLAUDE.md` に記載しています。新しいサイトを立ち上げる手順は [`PLAYBOOK.md`](./PLAYBOOK.md) を参照してください。
 
 ## デプロイ
 
 - main ブランチへの push で Vercel が自動デプロイします
+- FL の既存 Vercel プロジェクトはルートの `vercel.json` を使い、Root Directory を変えずに `sites/fl` をビルドします
+- 新しいサイトの Vercel プロジェクトは、Root Directory を `sites/<site>` にして作成します
 
 ## 参考にしたリポジトリ
 

@@ -1,4 +1,4 @@
-// 章・レッスンの定義（サイドバーとプレースホルダ生成の単一の情報源）。
+// 章・レッスンの定義（サイドバーの元データ）。
 // カリキュラムを変えるときは sites/al-ta/CLAUDE.md の対応表・docs/index.md・docs/quiz/types.ts も同期する。
 export type LessonDef = { n: number; title: string };
 export type ChapterDef = { id: number; title: string; lessons: LessonDef[] };

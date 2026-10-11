@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="JSTQB Advanced Level テストアナリスト 学習コンテンツのロゴ。ティールの角丸四角に白い AL-TA の文字。">
+  <style>
+    .bg-from { stop-color: #0b6b63; }
+    .bg-to { stop-color: #07423e; }
+    .mark { fill: #ffffff; }
+    .bar { fill: #fbbf24; }
+    @media (prefers-color-scheme: dark) {
+      .bg-from { stop-color: #5eead4; }
+      .bg-to { stop-color: #2dd4bf; }
+      .mark { fill: #042f2e; }
+      .bar { fill: #0b6b63; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" class="bg-from" stop-color="#0b6b63"/>
+      <stop offset="1" class="bg-to" stop-color="#07423e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <text x="256" y="150" class="mark" fill="#ffffff" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="72" font-weight="700" letter-spacing="4"
+        text-anchor="middle" dominant-baseline="central">JSTQB</text>
+  <text x="256" y="266" class="mark" fill="#ffffff" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="150" font-weight="700" letter-spacing="-4"
+        text-anchor="middle" dominant-baseline="central">AL-TA</text>
+  <rect x="132" y="360" width="248" height="20" rx="10" class="bar" fill="#fbbf24"/>
+</svg>

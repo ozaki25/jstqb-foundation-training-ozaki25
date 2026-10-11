@@ -4,6 +4,16 @@
   "private": true,
   "type": "module",
   "description": "JSTQB Advanced Level テストアナリスト（CTAL-TA V4.0）の合格を目指す非公式の学習コンテンツです（立ち上げ中）。",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "docs:lint": "textlint --config ../../.textlintrc.json \"docs/**/*.md\"",
+    "quiz:validate": "node ../../packages/shared/scripts/quiz-validate.mjs .",
+    "check:bold": "find docs/lessons -maxdepth 2 -name index.md -print0 | xargs -0 -r node ../../.claude/hooks/check-bold.js",
+    "check:style": "node ../../.claude/hooks/check-style.js docs/lessons",
+    "pwa:icons": "pwa-assets-generator"
+  },
   "dependencies": {
     "@jstqb/shared": "*"
   }

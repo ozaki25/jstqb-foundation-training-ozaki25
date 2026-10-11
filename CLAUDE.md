@@ -243,6 +243,7 @@ npm run fl:dev / fl:build / fl:preview / fl:test:e2e
 - `npm run docs:lint -w sites/<site>` がエラーなしで通る
 - `npm run docs:build -w sites/<site>` が成功する
 - ドリルを触ったら `npm run quiz:validate -w sites/<site>` も通る
-- レッスンを触ったら `npm run check:bold -w sites/<site>` と `npm run check:style -w sites/<site>` の出力が空（個別のファイルは `node .claude/hooks/check-bold.js sites/<site>/docs/lessons/*/index.md` と `node .claude/hooks/check-style.js sites/<site>/docs/lessons` でも検査できる）
+- レッスンを触ったら `npm run check:bold -w sites/<site>` と `npm run check:style -w sites/<site>` の出力が空
+  - 個別のファイルは `node .claude/hooks/check-bold.js sites/<site>/docs/lessons/*/index.md` と `node .claude/hooks/check-style.js sites/<site>/docs/lessons` でも検査できる
 - `packages/shared/` や `.claude/` を変更したときは、全サイトで `npm run docs:build` と `npm run quiz:validate` を通す
 - ドキュメント（`CLAUDE.md`・`README.md`・`PLAYBOOK.md` など）を変えたら `npx textlint --config .textlintrc.json <ファイル>` を通す
