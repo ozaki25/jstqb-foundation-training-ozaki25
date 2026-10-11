@@ -1,6 +1,6 @@
 import type { ChapterMeta as BaseChapterMeta } from "@jstqb/shared/quiz/types";
 
-export type { Difficulty, Quiz, StoredAnswer, StoredAnswers } from "@jstqb/shared/quiz/types";
+export type { Difficulty, Quiz, QuizFigure, StoredAnswer, StoredAnswers } from "@jstqb/shared/quiz/types";
 
 export type ChapterId = 1 | 2 | 3 | 4 | 5 | 6;
 

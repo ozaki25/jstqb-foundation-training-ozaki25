@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import type { Quiz } from '@quiz/types'
+import QuizFigure from './QuizFigure.vue'
 
 const props = defineProps<{
   quiz: Quiz
@@ -143,6 +144,8 @@ const effectiveCorrect = computed(() => {
 
     <p class="quiz-question" v-html="renderText(quiz.question)" />
 
+    <QuizFigure v-for="(fig, fi) in quiz.figures ?? []" :key="`q-${fi}`" :figure="fig" />
+
     <ol class="quiz-choices" aria-label="選択肢">
       <li v-for="(choice, i) in displayChoices" :key="displayOrder[i]">
         <button
@@ -176,6 +179,9 @@ const effectiveCorrect = computed(() => {
         解説を読めば次は分かります。一緒に確認しましょう。
       </p>
       <p class="quiz-explanation" v-html="renderText(quiz.explanation)" />
+      <div v-if="quiz.explanationFigures?.length" class="quiz-explanation-figures">
+        <QuizFigure v-for="(fig, fi) in quiz.explanationFigures" :key="`e-${fi}`" :figure="fig" />
+      </div>
       <p v-if="quiz.lesson" class="quiz-lesson-link">
         <a :href="`/lessons/${quiz.lesson}/`">{{ quiz.lesson }} を読み直す →</a>
       </p>
@@ -433,6 +439,10 @@ const effectiveCorrect = computed(() => {
 .dark .quiz-result {
   background: var(--vp-c-bg-soft);
   border-color: var(--vp-c-divider);
+}
+
+.quiz-explanation-figures {
+  margin-top: 0.75rem;
 }
 
 .quiz-lesson-link {
