@@ -8,3 +8,4 @@ references/
 
 # Claude Code の個人用設定（コミットしない）
 .claude/settings.local.json
+.tmp-render/
