@@ -1,0 +1,10 @@
+{
+  "name": "@jstqb/site-al-ta",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "JSTQB Advanced Level テストアナリスト（CTAL-TA V4.0）の合格を目指す非公式の学習コンテンツです（立ち上げ中）。",
+  "dependencies": {
+    "@jstqb/shared": "*"
+  }
+}
