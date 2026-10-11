@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch",
+      "Agent",
+      "Skill",
+      "TaskCreate",
+      "TaskUpdate",
+      "TaskList",
+      "TaskGet",
+      "mcp__Claude_Code_Remote__read_documentation",
+      "mcp__Claude_Code_Remote__get_session",
+      "mcp__github__get_commit",
+      "mcp__github__list_commits",
+      "mcp__github__list_branches",
+      "mcp__github__get_file_contents",
+      "mcp__github__pull_request_read",
+      "mcp__github__list_pull_requests",
+      "mcp__github__actions_list",
+      "mcp__github__actions_get",
+      "mcp__github__get_check_run",
+      "mcp__github__get_job_logs"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f *)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf / *)",
+      "Bash(rm -rf ~*)"
+    ]
+  }
+}

@@ -5,3 +5,6 @@ sites/*/docs/.vitepress/dist
 
 # 非公開の参考資料（コミット禁止）
 references/
+
+# Claude Code の個人用設定（コミットしない）
+.claude/settings.local.json
