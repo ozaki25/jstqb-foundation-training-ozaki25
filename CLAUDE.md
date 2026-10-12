@@ -203,6 +203,7 @@ sites/<site>/
 - **ブランチは `main` のみを使う。** main への push で Vercel が自動デプロイする。PR は原則作らない。
 - 公開後の改善サイクルと新コンテンツ立ち上げの手順は `PLAYBOOK.md` を参照。事実確認の疑義は `sites/<site>/FACTCHECK.md` に追記してから裏取り・修正する（レッスンを直したら対応するドリルも突き合わせる）。
 - Vercel はサイトごとにプロジェクトを分ける。FL の既存プロジェクトはルートの `vercel.json`（Root Directory を変えずに `sites/fl` をビルド）を使う。新しいサイトのプロジェクトは Root Directory を `sites/<site>` にして作る。
+- Root Directory を `sites/<site>` にしたプロジェクトでは、`sites/<site>/vercel.json` の `installCommand`（`cd ../.. && npm ci`）でリポジトリのルートから依存関係を入れる。サイトのディレクトリで `npm install` すると、そのサイト自身の依存（`@jstqb/shared`）しか入らず、ルートの devDependencies にある VitePress が見つからずにビルドが失敗するため。
 
 ## Markdown の太字（強調）について
 
