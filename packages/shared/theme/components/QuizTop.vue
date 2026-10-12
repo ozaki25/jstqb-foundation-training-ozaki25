@@ -231,7 +231,7 @@ function resetProgress() {
 }
 
 .summary-item-correct .summary-value {
-  color: #16a34a;
+  color: #166534;
 }
 
 .dark .summary-item-correct .summary-value {
@@ -300,7 +300,7 @@ function resetProgress() {
   font-size: 0.7rem;
   font-weight: 700;
   padding: 0.15em 0.5em;
-  background: #16a34a;
+  background: #15803d;
   color: #fff;
   border-radius: 3px;
   letter-spacing: 0.04em;
@@ -389,7 +389,7 @@ function resetProgress() {
 }
 
 .chapter-wrong {
-  color: #dc2626;
+  color: #b91c1c;
   font-weight: 600;
 }
 
@@ -613,7 +613,7 @@ function resetProgress() {
 }
 
 .btn-reset-progress:hover {
-  color: #dc2626;
+  color: #b91c1c;
   border-color: #fca5a5;
 }
 

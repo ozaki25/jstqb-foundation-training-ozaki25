@@ -343,8 +343,11 @@ onMounted(() => {
     return
   }
 
-  // 新規セッション: 既存の "前回の続き" 再開ロジック
-  if (!props.shuffle) {
+  // 新規セッション: 既存の "前回の続き" 再開ロジック（固定順の章別ドリルだけ）。
+  // ランダム・模擬試験（randomSample）は毎回まっさらな状態で始める。章別ドリルの回答を
+  // 復元すると、抽選したセットの一部が回答済みで始まったり、全問解いた人は
+  // いきなり結果画面になったりするため。回答の記録（localStorage）は復習ページのために残る。
+  if (!props.shuffle && props.randomSample == null) {
     for (const q of orderedQuizzes.value) {
       if (stored[q.id] !== undefined) {
         sessionAnswers.value[q.id] = {
@@ -659,7 +662,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.4rem;
   font-size: 0.75rem;
-  color: var(--vp-c-text-3);
+  color: var(--vp-c-text-2);
   margin: 0 0 1rem;
 }
 
@@ -798,11 +801,11 @@ onMounted(() => {
 }
 
 .finish-section-wrong {
-  color: #dc2626;
+  color: #b91c1c;
 }
 
 .finish-section-correct {
-  color: #16a34a;
+  color: #166534;
 }
 
 .finish-section-collapsible summary {
@@ -901,12 +904,12 @@ onMounted(() => {
 }
 
 .finish-row[data-correct='true'] .finish-row-mark {
-  color: #16a34a;
+  color: #166534;
   font-weight: 700;
 }
 
 .finish-row[data-correct='false'] .finish-row-mark {
-  color: #dc2626;
+  color: #b91c1c;
   font-weight: 700;
 }
 

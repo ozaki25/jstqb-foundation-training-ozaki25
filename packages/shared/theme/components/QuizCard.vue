@@ -56,12 +56,16 @@ const selectedDisplayIndex = ref<number | null>(
   toDisplayIndex(props.initialSelectedIndex ?? null)
 )
 const answered = ref(props.initialAnswered ?? false)
+// 「（前回の回答）」は、回答済みの状態で復元してマウントしたカードにだけ出す。
+// このカードで回答・やり直しをしたら消す（回答直後に出てしまう不具合の対策）。
+const showPrevMark = ref(props.initialAnswered ?? false)
 
 function select(displayI: number) {
   if (answered.value) return
   const originalI = displayOrder.value[displayI]
   selectedDisplayIndex.value = displayI
   answered.value = true
+  showPrevMark.value = false
   emit('answered', props.quiz.id, originalI === props.quiz.answer, originalI)
 }
 
@@ -118,6 +122,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 
 function resetAnswer() {
   answered.value = false
+  showPrevMark.value = false
   selectedDisplayIndex.value = null
   // もう一度解くときは並びも変える(答えの位置で覚えてしまうのを防ぐ)
   displayOrder.value = shuffleOrder(props.quiz.choices.length)
@@ -165,7 +170,7 @@ const effectiveCorrect = computed(() => {
       <div class="result-header">
         <p class="result-badge" :data-correct="effectiveCorrect !== null ? String(effectiveCorrect) : undefined">
           {{ effectiveCorrect ? '正解' : '不正解' }}
-          <span v-if="props.initialAnswered" class="result-badge-prev">（前回の回答）</span>
+          <span v-if="showPrevMark" class="result-badge-prev">（前回の回答）</span>
         </p>
         <button
           class="btn-reset"
@@ -338,7 +343,7 @@ const effectiveCorrect = computed(() => {
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.15em 0.55em;
-  background: #16a34a;
+  background: #15803d; /* 白文字 5.02:1 */
   color: #fff;
   border-radius: 3px;
   flex-shrink: 0;
@@ -403,11 +408,11 @@ const effectiveCorrect = computed(() => {
 }
 
 .result-badge[data-correct='true'] {
-  color: #16a34a;
+  color: #166534; /* 白〜#f1f1f2 の背景に 6.3:1 以上 */
 }
 
 .result-badge[data-correct='false'] {
-  color: #ea580c;
+  color: #c2410c; /* 白〜#f1f1f2 の背景に 4.59:1 以上 */
 }
 
 .dark .result-badge[data-correct='true'] {
