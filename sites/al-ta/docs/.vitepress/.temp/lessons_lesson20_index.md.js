@@ -1,0 +1,34 @@
+import { resolveComponent, useSSRContext } from "vue";
+import { ssrRenderAttrs, ssrRenderSuspense, ssrRenderComponent } from "vue/server-renderer";
+import { _ as _export_sfc } from "./plugin-vue_export-helper.1tPrXgE0.js";
+const __pageData = JSON.parse('{"title":"lesson20: クラウドテスト — 多様なテスト担当者に分担する利点と制限","description":"","frontmatter":{},"headers":[],"relativePath":"lessons/lesson20/index.md","filePath":"lessons/lesson20/index.md","lastUpdated":1791775851000}');
+const _sfc_main = { name: "lessons/lesson20/index.md" };
+function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
+  const _component_Mermaid = resolveComponent("Mermaid");
+  _push(`<div${ssrRenderAttrs(_attrs)}><h1 id="lesson20-クラウドテスト-—-多様なテスト担当者に分担する利点と制限" tabindex="-1">lesson20: クラウドテスト — 多様なテスト担当者に分担する利点と制限 <a class="header-anchor" href="#lesson20-クラウドテスト-—-多様なテスト担当者に分担する利点と制限" aria-label="Permalink to &quot;lesson20: クラウドテスト — 多様なテスト担当者に分担する利点と制限&quot;">​</a></h1><h2 id="このレッスンで学ぶこと" tabindex="-1">このレッスンで学ぶこと <a class="header-anchor" href="#このレッスンで学ぶこと" aria-label="Permalink to &quot;このレッスンで学ぶこと&quot;">​</a></h2><ul><li>クラウドテストが何を誰に分担するアプローチかを説明できるようになる</li><li>クラウドテストの 6 つの利点を、例を挙げて説明できるようになる</li><li>クラウドテストの 4 つの制限を、例を挙げて説明できるようになる</li><li>変動性が利点にも制限にもなる理由を説明できるようになる</li><li>クラウドテストがテストアナリストの技法の適用に置き換わらない理由を説明できるようになる</li></ul><h2 id="クラウドテストの仕組み" tabindex="-1">クラウドテストの仕組み <a class="header-anchor" href="#クラウドテストの仕組み" aria-label="Permalink to &quot;クラウドテストの仕組み&quot;">​</a></h2><p><strong>クラウドテスト</strong>は、多様な場所にいて多様な背景を持つ、内部または外部のテスト担当者のグループにテストを分担するテストアプローチです。「クラウド」は群衆（crowd）のことで、クラウドコンピューティングの cloud とは別の言葉です。</p>`);
+  ssrRenderSuspense(_push, {
+    default: () => {
+      _push(ssrRenderComponent(_component_Mermaid, {
+        id: "mermaid-39",
+        class: "mermaid",
+        graph: "flowchart%20TB%0A%20%20%20%20TA%5B%E3%83%86%E3%82%B9%E3%83%88%E3%82%A2%E3%83%8A%E3%83%AA%E3%82%B9%E3%83%88%5Cn%E3%83%86%E3%82%B9%E3%83%88%E3%82%92%E5%88%86%E6%8B%85%E3%81%95%E3%81%9B%E3%82%8B%5D%20--%3E%20G%5B%E5%A4%9A%E6%A7%98%E3%81%AA%E3%83%86%E3%82%B9%E3%83%88%E6%8B%85%E5%BD%93%E8%80%85%5Cn%E5%A0%B4%E6%89%80%E3%83%BB%E8%83%8C%E6%99%AF%E3%83%BB%E7%AB%AF%E6%9C%AB%E3%81%8C%5Cn%E3%81%9D%E3%82%8C%E3%81%9E%E3%82%8C%E9%81%95%E3%81%86%5D%0A%20%20%20%20G%20--%3E%20F%5B%E5%A4%9A%E6%95%B0%E3%81%AE%E7%99%BA%E8%A6%8B%E4%BA%8B%E9%A0%85%5Cn%E9%87%8D%E8%A4%87%E3%82%84%E5%81%BD%E9%99%BD%E6%80%A7%E3%82%92%E5%90%AB%E3%82%80%5D%0A%20%20%20%20F%20--%3E%20TA%0A"
+      }, null, _parent));
+    },
+    fallback: () => {
+      _push(` Loading... `);
+    },
+    _: 1
+  });
+  _push(`<p>テストアナリスト（TA）にとって、クラウドテストは使用性の妥当性確認をコスト効率よく行う方法になりえます。カバーできるのは使用性だけではなく、機能的品質特性と非機能的品質特性の両方です（Alyahya、2020。Leicht ら、2017）。経験ベースのテストの位置づけは <a href="/lessons/lesson18/">lesson18</a> で扱っています。</p><h2 id="利点" tabindex="-1">利点 <a class="header-anchor" href="#利点" aria-label="Permalink to &quot;利点&quot;">​</a></h2><p>シラバスが挙げる利点は 6 つです。</p><table tabindex="0"><thead><tr><th>利点</th><th>内容</th></tr></thead><tbody><tr><td>多様なテスト環境</td><td>テスト担当者はさまざまな地理的な場所にいて、さまざまなデバイス・ブラウザー・ネットワーク条件で、さまざまな環境設定を使える</td></tr><tr><td>高い柔軟性</td><td>短時間に多数のテストを実施する必要があっても、容易にスケールできる</td></tr><tr><td>費用対効果</td><td>大規模で多様な社内テストチームを維持したり、外部のテストサービスで補ったりするより、通常は低コストである</td></tr><tr><td>迅速なフィードバック</td><td>テスト担当者が素早くフィードバックを返せるので、故障の早期発見と修正に役立つ</td></tr><tr><td>実際のユーザー視点</td><td>テスト担当者がアプリケーションの実際のユーザーであることもあり、ユーザーエクスペリエンスと使用性についてよりよい洞察が得られる。ユーザー受け入れテストで特に価値がある</td></tr><tr><td>変動性</td><td>毎回さまざまなテスト担当者がテストを実行するため再現性は低くなるが、カバレッジが広くなり、欠陥の発見が増える</td></tr></tbody></table><h3 id="変動性の二面性" tabindex="-1">変動性の二面性 <a class="header-anchor" href="#変動性の二面性" aria-label="Permalink to &quot;変動性の二面性&quot;">​</a></h3><p>変動性は、利点の表に載っていながら「制限とも言える」と注記されている項目です。</p><table tabindex="0"><thead><tr><th>見方</th><th>内容</th></tr></thead><tbody><tr><td>制限として</td><td>同じテストを同じように再実行できないので、再現性が低い</td></tr><tr><td>利点として</td><td>担当者ごとにやり方が違うぶんカバレッジが広がり、欠陥を発見する機会が増える</td></tr></tbody></table><p>「クラウドテストは再現性が高い」という選択肢はひっかけです。再現性の低さを受け入れて、広いカバレッジを得るアプローチです。</p><h2 id="制限" tabindex="-1">制限 <a class="header-anchor" href="#制限" aria-label="Permalink to &quot;制限&quot;">​</a></h2><p>シラバスが挙げる制限は 4 つです。</p><table tabindex="0"><thead><tr><th>制限</th><th>内容</th></tr></thead><tbody><tr><td>テスト品質の不安定性</td><td>テストの品質が個々のテスト担当者のスキルで大きく変わる。ただし、ユーザーエクスペリエンスに関するフィードバックが目的なら、これは問題にならない場合がある</td></tr><tr><td>コミュニケーションの課題</td><td>タイムゾーン・文化の違い・言葉の壁があり、さまざまな場所にいる多数のテスト担当者との調整が難しい</td></tr><tr><td>セキュリティ</td><td>ソフトウェアを外部のテスト担当者と共有すると、データセキュリティと機密性のリスクが生じる。適切な対策で軽減すれば、機密情報を開示したり盗用を助長したりせずに責任ある形で利用できる</td></tr><tr><td>文書化と報告</td><td>大規模で多様なテスト担当者を相手にすると、重複や偽陽性を含む多数の発見事項をマネジメントしながら網羅的なテスト文書を確保するのが難しい</td></tr></tbody></table><div class="tip custom-block"><p class="custom-block-title">制限が目的によっては問題にならない</p><p>テスト品質の不安定性は、「スキルの高いテスト担当者でなければ見つからない欠陥」を狙うときには重い制限です。一方、実際のユーザーがどう感じるかを知りたいときには、スキルのばらつきはそもそも問題になりません。制限を暗記するだけでなく、テストの目的と結び付けて考えます。</p></div><h2 id="向く場面と向かない場面" tabindex="-1">向く場面と向かない場面 <a class="header-anchor" href="#向く場面と向かない場面" aria-label="Permalink to &quot;向く場面と向かない場面&quot;">​</a></h2><p>利点と制限をもとに、向く場面と向かない場面を整理します。ベータテストを例に挙げている行は、この教材で補ったものです。</p><table tabindex="0"><thead><tr><th>場面</th><th>判断</th><th>理由</th></tr></thead><tbody><tr><td>多様なデバイスやネットワーク条件で動くかを広く確かめたい</td><td>向く</td><td>多様なテスト環境を社内でそろえるより低コスト</td></tr><tr><td>ユーザー受け入れテストやベータテストで、実際のユーザーの反応を知りたい</td><td>向く</td><td>実際のユーザー視点と迅速なフィードバック</td></tr><tr><td>同じテストスクリプトを毎回同じように再実行したい</td><td>向かない</td><td>変動性があり、再現性は低い</td></tr><tr><td>テスト技法を体系的に適用してカバレッジを保証したい</td><td>向かない</td><td>それは TA の仕事で、クラウドテストは置き換えにならない</td></tr><tr><td>機密情報を含むソフトウェアで、外部に共有する際の対策を取れない</td><td>向かない</td><td>セキュリティと機密性のリスクを軽減できない</td></tr></tbody></table><p>多様な構成の組み合わせを体系的に減らしたいなら組み合わせテスト（<a href="/lessons/lesson11/">lesson11</a>）、使用性を評価する手法そのものは第 4 章の使用性テスト（<a href="/lessons/lesson24/">lesson24</a>）で扱います。</p><div class="warning custom-block"><p class="custom-block-title">テスト技法の適用に置き換わるものではない</p><p>クラウドテストは、TA がテスト技法を適用する活動に置き換わるものではありません。多様なテスト環境におけるカバレッジを高めるアプローチです。技法の選択の中でどう位置づけるかは <a href="/lessons/lesson21/">lesson21</a> で扱います。</p></div><h2 id="試験のポイント" tabindex="-1">試験のポイント <a class="header-anchor" href="#試験のポイント" aria-label="Permalink to &quot;試験のポイント&quot;">​</a></h2><ul><li>利点 6 つ（多様なテスト環境・高い柔軟性・費用対効果・迅速なフィードバック・実際のユーザー視点・変動性）と制限 4 つ（テスト品質の不安定性・コミュニケーションの課題・セキュリティ・文書化と報告）を例とともに想起できるようにする（K2）</li><li>変動性は再現性を下げる制限でありながら、カバレッジを広げて欠陥の発見を増やす利点でもある</li><li>テスト品質の不安定性は、ユーザーエクスペリエンスのフィードバックが目的なら問題にならない場合があり、セキュリティのリスクは適切な対策で軽減できる</li><li>クラウドテストは TA がテスト技法を適用する活動の置き換えではなく、多様なテスト環境のカバレッジを高めるアプローチである</li></ul></div>`);
+}
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("lessons/lesson20/index.md");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+const index = /* @__PURE__ */ _export_sfc(_sfc_main, [["ssrRender", _sfc_ssrRender]]);
+export {
+  __pageData,
+  index as default
+};

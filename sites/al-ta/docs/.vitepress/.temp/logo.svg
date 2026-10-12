@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="JSTQB Advanced Level テストアナリスト 学習コンテンツのロゴ。紫の角丸四角に、小さな JSTQB AL の文字と大きな TA の文字。">
+  <style>
+    .bg-from { stop-color: #6d28d9; }
+    .bg-to { stop-color: #4c1d95; }
+    .mark { fill: #ffffff; }
+    .bar { fill: #fbbf24; }
+    @media (prefers-color-scheme: dark) {
+      .bg-from { stop-color: #c4b5fd; }
+      .bg-to { stop-color: #a78bfa; }
+      .mark { fill: #2e1065; }
+      .bar { fill: #6d28d9; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" class="bg-from" stop-color="#6d28d9"/>
+      <stop offset="1" class="bg-to" stop-color="#4c1d95"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <text x="256" y="140" class="mark" fill="#ffffff" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="60" font-weight="700" letter-spacing="6"
+        text-anchor="middle">JSTQB AL</text>
+  <text x="256" y="368" class="mark" fill="#ffffff" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="240" font-weight="700" letter-spacing="-8"
+        text-anchor="middle">TA</text>
+  <rect x="132" y="420" width="248" height="20" rx="10" class="bar" fill="#fbbf24"/>
+</svg>
