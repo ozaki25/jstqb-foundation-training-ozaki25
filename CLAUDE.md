@@ -204,6 +204,7 @@ sites/<site>/
 - 公開後の改善サイクルと新コンテンツ立ち上げの手順は `PLAYBOOK.md` を参照。事実確認の疑義は `sites/<site>/FACTCHECK.md` に追記してから裏取り・修正する（レッスンを直したら対応するドリルも突き合わせる）。
 - Vercel はサイトごとにプロジェクトを分ける。FL の既存プロジェクトはルートの `vercel.json`（Root Directory を変えずに `sites/fl` をビルド）を使う。新しいサイトのプロジェクトは Root Directory を `sites/<site>` にして作る。
 - Root Directory を `sites/<site>` にしたプロジェクトでは、`sites/<site>/vercel.json` の `installCommand`（`cd ../.. && npm ci`）でリポジトリのルートから依存関係を入れる。サイトのディレクトリで `npm install` すると、そのサイト自身の依存（`@jstqb/shared`）しか入らず、ルートの devDependencies にある VitePress が見つからずにビルドが失敗するため。
+- Vercel の Redeploy が「Git information retrieval failed for this deployment」で失敗したら、Redeploy を繰り返さない。そのサイトのディレクトリ（`sites/<site>/`）のファイルを変えるコミットを main に push して、新しいデプロイを起こす。サイトのファイルに変更がないコミットは「Skipped - Not affected」となり、デプロイされない。
 
 ## サイトの見分け方（見た目）
 
