@@ -63,7 +63,7 @@ for (const n of CHAPTER_IDS) {
     const { page, errors } = await freshChapter(browser, n)
     t.info(`chapter ${n}: ${total} questions`)
 
-    const problems = { order: [], position: [], difficulty: [], nextGate: [], badge: [], highlight: [], disabled: [], explanation: [], lessonLink: [], progress: [], wrongNote: [] }
+    const problems = { order: [], position: [], difficulty: [], nextGate: [], badge: [], prevNote: [], highlight: [], disabled: [], explanation: [], lessonLink: [], progress: [], wrongNote: [] }
     const expectedCorrect = new Map() // id -> boolean
     const clickedOriginal = new Map() // id -> original index clicked
 
@@ -91,7 +91,9 @@ for (const n of CHAPTER_IDS) {
       const badge = await page.getAttribute('.result-badge', 'data-correct')
       if (badge !== String(wantCorrect)) problems.badge.push(`${q.id}: data-correct=${badge} want ${wantCorrect}`)
       const badgeText = norm(await page.textContent('.result-badge'))
-      if (badgeText !== (wantCorrect ? '正解' : '不正解')) problems.badge.push(`${q.id}: badge text "${badgeText}"`)
+      if (badgeText.replace(/\s*（前回の回答）/, '') !== (wantCorrect ? '正解' : '不正解')) problems.badge.push(`${q.id}: badge text "${badgeText}"`)
+      // A fresh answer is not a "previous answer": the （前回の回答） note is for restored answers only.
+      if (/前回の回答/.test(badgeText)) problems.prevNote.push(`${q.id}: "${badgeText}"`)
 
       const classes = await readChoiceClasses(page)
       const texts = await readChoices(page)
@@ -129,6 +131,7 @@ for (const n of CHAPTER_IDS) {
     t.check('次の問題 is disabled until answered, enabled after; last button says 結果を見る', problems.nextGate.length === 0, problems.nextGate.slice(0, 3).join(' | '))
     t.check('progress counter follows answers', problems.progress.length === 0, problems.progress.slice(0, 3).join(' | '))
     t.check('badge 正解/不正解 matches the clicked choice', problems.badge.length === 0, problems.badge.slice(0, 3).join(' | '))
+    t.check('a fresh answer is not labelled （前回の回答）', problems.prevNote.length === 0, `${problems.prevNote.length} of ${total} cards, e.g. ${problems.prevNote.slice(0, 2).join(' | ')}`)
     t.check('exactly the correct choice is green, the wrong click is red, the rest dim (any shuffle)', problems.highlight.length === 0, problems.highlight.slice(0, 3).join(' | '))
     t.check('choices are disabled after answering', problems.disabled.length === 0, problems.disabled.slice(0, 3).join(' | '))
     t.check('explanation text equals data', problems.explanation.length === 0, problems.explanation.slice(0, 3).join(' | '))
