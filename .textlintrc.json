@@ -9,7 +9,7 @@
       "no-exclamation-question-mark": false,
       "no-doubled-joshi": false,
       "ja-no-successive-word": {
-        "allow": ["○", "〇"]
+        "allow": ["○", "〇", "なぜ"]
       },
       "no-unmatched-pair": false,
       "sentence-length": {
