@@ -48,9 +48,9 @@ async function waitMermaid(page, expected) {
   await page.waitForTimeout(100)
 }
 
-// Describe the figures inside a scope (question area or explanation area).
-async function readFigures(page, scopeSelector) {
-  return page.$$eval(`${scopeSelector} .quiz-figure`, (figs) =>
+// Describe the figures matched by a selector (question area or explanation area).
+async function readFigures(page, figureSelector) {
+  return page.$$eval(figureSelector, (figs) =>
     figs.map((f) => {
       const type = f.getAttribute('data-type')
       const txt = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '')
@@ -140,7 +140,7 @@ async function checkQuestion(page, q, t, acc, mode) {
   const eFigs = q.explanationFigures ?? []
   await waitMermaid(page, mermaidCount(qFigs))
   const totalBefore = await page.locator('.quiz-card .quiz-figure').count()
-  const gotQ = await readFigures(page, '.quiz-card > .quiz-figure:not(.never)')
+  const gotQ = await readFigures(page, '.quiz-card > .quiz-figure')
   // (question figures are direct children of .quiz-card; explanation figures live in .quiz-explanation-figures)
   const directQ = await page.locator('.quiz-card > .quiz-figure').count()
   if (directQ !== qFigs.length) acc.counts.push(`${label}: question figures ${directQ} want ${qFigs.length}`)
@@ -156,7 +156,7 @@ async function checkQuestion(page, q, t, acc, mode) {
   const explAfter = await page.locator('.quiz-explanation-figures').count()
   if (hasExplFigs && explAfter !== 1) acc.late.push(`${label}: explanation figures container missing after answering`)
   if (!hasExplFigs && explAfter !== 0) acc.late.push(`${label}: unexpected explanation figures container`)
-  const gotE = hasExplFigs ? await readFigures(page, '.quiz-explanation-figures') : []
+  const gotE = hasExplFigs ? await readFigures(page, '.quiz-explanation-figures .quiz-figure') : []
   if (gotE.length !== eFigs.length) acc.counts.push(`${label}: explanation figures ${gotE.length} want ${eFigs.length}`)
   eFigs.forEach((f, i) => acc.content.push(...compareFigure(f, gotE[i], `${label} e-fig${i + 1}`)))
   // question figures survive the answer
@@ -168,7 +168,7 @@ async function checkQuestion(page, q, t, acc, mode) {
 }
 
 function newAcc() {
-  return { open: [], counts: [], early: [], late: [], content: [], overflow: [], hints: [], aria: [] }
+  return { open: [], counts: [], early: [], late: [], content: [], overflow: [], contentOverflow: [], hints: [], aria: [] }
 }
 
 function reportAcc(t, acc, n) {
@@ -231,10 +231,14 @@ async function measure(page, q, acc, stage) {
         preOverflow: pre ? pre.scrollWidth > pre.clientWidth + 1 : false,
       }
     })
-    return { scrollWidth: doc.scrollWidth, bodyScrollWidth: document.body.scrollWidth, clientWidth: doc.clientWidth, figs }
+    const content = document.querySelector('.VPContent')
+    return { scrollWidth: doc.scrollWidth, bodyScrollWidth: document.body.scrollWidth, clientWidth: doc.clientWidth, contentScrollWidth: content ? content.scrollWidth : -1, figs }
   }, 375)
   if (m.scrollWidth > 375) acc.overflow.push(`${q.id} (${stage}): documentElement.scrollWidth=${m.scrollWidth}`)
   if (m.bodyScrollWidth > 375) acc.overflow.push(`${q.id} (${stage}): body.scrollWidth=${m.bodyScrollWidth}`)
+  // The same measurement restricted to the page content (nav bar excluded), so a figure that
+  // overflows is not masked by anything else that widens the page.
+  if (m.contentScrollWidth > 375 || m.contentScrollWidth < 0) acc.contentOverflow.push(`${q.id} (${stage}): .VPContent scrollWidth=${m.contentScrollWidth}`)
   for (const f of m.figs) {
     if (f.right > 376 || f.left < -1) acc.overflow.push(`${q.id} (${stage}): ${f.type} figure box spans ${f.left}..${f.right}`)
     if (f.type === 'table' || f.type === 'mermaid') {
@@ -251,13 +255,13 @@ async function measure(page, q, acc, stage) {
 block('FG-B. Figure questions at 375px (no horizontal page scroll, scroll hints, labelled scrollers)', async ({ t, browser }) => {
   const { page, errors } = await newInstrumentedPage(browser, { viewport: MOBILE })
   const acc = newAcc()
-  let tablesOverflowing = 0
   for (const q of FIGURE_QUIZZES) {
     await openQuestion(page, q)
     await checkQuestion(page, q, t, acc, mobileMode)
   }
   reportAcc(t, acc, FIGURE_QUIZZES.length)
   t.check('document never scrolls horizontally at 375px (scrollWidth <= 375), before and after answering', acc.overflow.length === 0, `${acc.overflow.length} problems: ${acc.overflow.slice(0, 4).join(' | ')}`)
+  t.check('page content (.VPContent, nav bar excluded) never overflows 375px either', acc.contentOverflow.length === 0, `${acc.contentOverflow.length} problems: ${acc.contentOverflow.slice(0, 4).join(' | ')}`)
   t.check('「横にスクロールできます」hint shows exactly when a table / diagram overflows its box', acc.hints.length === 0, acc.hints.slice(0, 3).join(' | '))
   t.check('overflowing tables are labelled keyboard-scrollable regions', acc.aria.length === 0, acc.aria.slice(0, 3).join(' | '))
   t.check('no console / page / network errors', !hasErrors(errors), summarizeErrors(errors))
