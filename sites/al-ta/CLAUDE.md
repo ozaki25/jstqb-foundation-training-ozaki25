@@ -102,3 +102,10 @@
   - 追加・編集後は `npm run quiz:validate -w sites/al-ta` で図表の形式（caption・alt の有無、表の列数の一致、画像の実在）も検証する。
 - 問題数の目安: K2 のレッスンは 5 問、K3・K4 のレッスンは 7 問（うち 4 問以上は導出・計算・判定の適用問題）。難易度は K2→normal、K3・K4→hard を基本に、キーワードの定義を問う easy はレッスンごとに 1 問まで。
 - 模擬試験（`/quiz/random-45/`）は ISTQB の出題表どおりの配分（章ごとに 8／3／22／4／8 問、計 45 問）で抽選する。学習目標ごとの出題数は `docs/quiz/types.ts` の `MOCK_EXAM_QUOTA` に定義し、`QuizPage` の `quotaGroups` で渡す。どのレッスンも最低 4 問は用意する。
+
+### E2E テスト
+
+- `sites/al-ta/tests/` に E2E テストがある。FL（`sites/fl/tests/`）と同じ仕組み（playwright-core と @sparticuz/chromium、ブロックごとに新しいブラウザを起動する独自ランナー）で、`npm run test:e2e -w sites/al-ta` で実行する。
+- ビルドしたサイトを http://localhost:4174 で配信してから実行する（FL は 4173）。ベース URL は環境変数 `E2E_BASE` で変えられる。`BLOCKS=MK` のように、ブロックの接頭辞で絞り込める。
+- 期待値（章ごとの問題数・模擬試験の配分・図表の中身）は `docs/quiz/data/*.ts` と `docs/quiz/types.ts` から読み込んで求める。数値を直書きしない。問題や配分を変えても、テストの修正は要らない。
+- ドリルの仕様（章別は固定順、選択肢の表示順はクライアントでシャッフル、回答は localStorage に保存）を変えたときや、`figures` を追加したときは、このテストを通す。

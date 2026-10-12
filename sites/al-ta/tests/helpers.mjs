@@ -57,10 +57,11 @@ function isBenign(url) {
   return BENIGN_404.some((b) => url.includes(b))
 }
 
-export async function newInstrumentedPage(browser, { viewport } = {}) {
-  const context = await browser.newContext(
-    viewport ? { viewport } : undefined,
-  )
+export async function newInstrumentedPage(browser, { viewport, colorScheme } = {}) {
+  const ctxOpts = {}
+  if (viewport) ctxOpts.viewport = viewport
+  if (colorScheme) ctxOpts.colorScheme = colorScheme
+  const context = await browser.newContext(ctxOpts)
   const page = await context.newPage()
   const errors = {
     pageErrors: [],      // uncaught JS exceptions
@@ -292,14 +293,18 @@ export async function clickNext(page) {
 
 // "3 / 37" from the card meta line → { n, total }
 export async function readCardPosition(page) {
-  const txt = await page.textContent('.quiz-num')
+  const el = await page.$('.quiz-num')
+  if (!el) return null
+  const txt = await el.textContent()
   const m = txt.match(/(\d+)\s*\/\s*(\d+)/)
   return m ? { n: Number(m[1]), total: Number(m[2]) } : null
 }
 
 // "5 / 45 問回答済み" → { answered, total }
 export async function readProgress(page) {
-  const txt = await page.textContent('.quiz-progress-text')
+  const el = await page.$('.quiz-progress-text')
+  if (!el) return null
+  const txt = await el.textContent()
   const m = txt.match(/(\d+)\s*\/\s*(\d+)\s*問回答済み/)
   return m ? { answered: Number(m[1]), total: Number(m[2]) } : null
 }

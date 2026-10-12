@@ -17,7 +17,8 @@
     "fl:dev": "npm run docs:dev -w sites/fl",
     "fl:build": "npm run docs:build -w sites/fl",
     "fl:preview": "npm run docs:preview -w sites/fl",
-    "fl:test:e2e": "npm run test:e2e -w sites/fl"
+    "fl:test:e2e": "npm run test:e2e -w sites/fl",
+    "al-ta:test:e2e": "npm run test:e2e -w sites/al-ta"
   },
   "repository": {
     "type": "git",

@@ -12,7 +12,8 @@
     "quiz:validate": "node ../../packages/shared/scripts/quiz-validate.mjs .",
     "check:bold": "find docs/lessons -maxdepth 2 -name index.md -print0 | xargs -0 -r node ../../.claude/hooks/check-bold.js",
     "check:style": "node ../../.claude/hooks/check-style.js docs/lessons",
-    "pwa:icons": "pwa-assets-generator"
+    "pwa:icons": "pwa-assets-generator",
+    "test:e2e": "node tests/run-all.mjs"
   },
   "dependencies": {
     "@jstqb/shared": "*"

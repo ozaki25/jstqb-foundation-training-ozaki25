@@ -159,7 +159,9 @@ block('MK-A. Mock exam (random-45): quota, uniqueness, re-draws, restore on relo
   t.check('別の 45 問 → a different set', JSON.stringify(redrawn) !== JSON.stringify(ids0))
   t.check('別の 45 問 → card 1 / 45, nothing answered, nothing finished', (await readCardPosition(page)).n === 1 && (await readProgress(page)).answered === 0)
   t.check('別の 45 問 → the first card is the first newly drawn question', (await currentQuiz(page)).id === redrawn[0])
-  // and survives reload
+  // and survives reload. (The first run's answers are cleared first: answers kept in localStorage
+  // are restored onto a reloaded draw whenever the same questions come up, see MK-D.)
+  await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle' })
   await page.waitForSelector('.quiz-card')
   t.check('the re-drawn set is what a reload restores', JSON.stringify(await readIds(page, MOCK_KEY)) === JSON.stringify(redrawn))
@@ -318,7 +320,6 @@ block('MK-C. Review page (empty state, wrong-only set, stale ids, flow from a dr
   const a = await answerCurrent(page, 'wrong')
   await clickNext(page)
   const b = await answerCurrent(page, 'correct')
-  await gotoPage(page, '/quiz/top-dummy-skip').catch(() => {})
   await gotoPage(page, '/quiz/review/')
   await page.waitForSelector('.quiz-card, .review-empty')
   t.check('wrong answer from chapter drill appears in review (1 question)', JSON.stringify(await readProgress(page)) === JSON.stringify({ answered: 0, total: 1 }), JSON.stringify(await readProgress(page)))
@@ -345,18 +346,26 @@ block('MK-D. Earlier drill answers must not hijack a fresh random draw', async (
     await page.waitForSelector('.quiz-card, .quiz-finish')
     const fresh = (await page.locator('.quiz-card').count()) === 1 && (await page.locator('.quiz-finish').count()) === 0
     t.check(`${path} after all ${ALL.length} questions were answered elsewhere: a fresh draw starts at 1 / ${n}`, fresh && (await readCardPosition(page))?.n === 1 && (await readProgress(page))?.answered === 0,
-      `finish=${await page.locator('.quiz-finish').count()} progress=${JSON.stringify(await readProgress(page).catch(() => null))}`)
+      `finish screen=${await page.locator('.quiz-finish').count()} card=${JSON.stringify(await readCardPosition(page))}`)
   }
 
-  // Partly answered (first half of the bank): still a fresh draw, no 前回の続き toast.
+  // Partly answered (first half of the bank): every fresh draw must still start at card 1 with no
+  // 前回の続き toast. Several draws, because the draw only collides with an answered question
+  // about half the time.
   const half = Object.fromEntries(ALL.slice(0, Math.floor(ALL.length / 2)).map((q) => [q.id, { correct: true, ts: 1, selectedIndex: q.answer }]))
   await setStorage(page, { local: { [STORAGE_KEY]: half } })
   for (const path of ['/quiz/random-10/', MOCK_PATH]) {
-    await page.evaluate(() => sessionStorage.clear())
-    await page.goto(url(path), { waitUntil: 'networkidle' })
-    await page.waitForSelector('.quiz-card, .quiz-finish')
-    t.check(`${path} with half the bank answered elsewhere: no 前回の続き toast, starts at card 1`, (await page.locator('.quiz-resume-toast').count()) === 0 && (await readCardPosition(page))?.n === 1,
-      `toast=${await page.locator('.quiz-resume-toast').count()} pos=${JSON.stringify(await readCardPosition(page).catch(() => null))}`)
+    const bad = []
+    for (let i = 0; i < 6; i++) {
+      await page.evaluate(() => sessionStorage.clear())
+      await page.goto(url(path), { waitUntil: 'networkidle' })
+      await page.waitForSelector('.quiz-card, .quiz-finish')
+      const toast = await page.locator('.quiz-resume-toast').count()
+      const pos = await readCardPosition(page)
+      const answered = (await readProgress(page))?.answered
+      if (toast !== 0 || !pos || pos.n !== 1 || answered !== 0) bad.push(`draw ${i + 1}: toast=${toast} card=${pos && pos.n} answered=${answered}`)
+    }
+    t.check(`${path} with half the bank answered elsewhere: 6 fresh draws all start at card 1, 0 answered, no 前回の続き toast`, bad.length === 0, bad.join(' | '))
   }
 
   // Random (all) and review use the shuffle path.

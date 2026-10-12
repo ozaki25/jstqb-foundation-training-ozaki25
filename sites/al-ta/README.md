@@ -35,6 +35,16 @@ npm run quiz:validate -w sites/al-ta  # ドリルデータの検証
 npm run check:bold -w sites/al-ta     # 太字の崩れ検査
 npm run check:style -w sites/al-ta    # レッスンの型の機械検査
 npm run pwa:icons -w sites/al-ta      # logo.svg から PWA アイコンを生成
+npm run test:e2e -w sites/al-ta       # ドリルの E2E テスト（al-ta:test:e2e）
+```
+
+E2E テストは、ビルドしたサイトを http://localhost:4174 で配信した状態で実行します（`E2E_BASE` で変更できます）。
+
+```bash
+npm run docs:build -w sites/al-ta
+npm run docs:preview -w sites/al-ta -- --port 4174   # 別のターミナルで起動
+npm run test:e2e -w sites/al-ta
+BLOCKS=MK npm run test:e2e -w sites/al-ta            # 模擬試験のブロックだけ実行
 ```
 
 ## ディレクトリ構成
@@ -56,6 +66,7 @@ docs/
     lessons.mts                章・レッスンの定義（サイドバーの元データ）
     theme/index.ts             共通テーマ（packages/shared/theme）の読み込み
     theme/al-ta.css            ブランドカラー（深いバイオレット）の上書き
+tests/                         ドリルの E2E テスト
 FACTCHECK.md                   事実確認の台帳
 SPRINTLOG.md                   開発の経緯
 ```

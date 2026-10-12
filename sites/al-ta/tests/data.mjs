@@ -50,7 +50,8 @@ export const LESSONS = (() => {
 
 // The text the page shows for a string with `code` spans (QuizCard.renderText).
 export function norm(s) {
-  return String(s).replace(/`/g, '').replace(/\s+/g, ' ').trim()
+  // Zero-width characters come from VitePress header anchors (and similar), never from the data.
+  return String(s).replace(/`/g, '').replace(/[\u200b-\u200d\ufeff]/g, '').replace(/\s+/g, ' ').trim()
 }
 
 // A question stem is not unique on its own (q373 / q377 share a stem and differ in the
