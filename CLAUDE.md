@@ -15,7 +15,7 @@
 | サイト | 対象資格 | ディレクトリ | 状態 |
 |---|---|---|---|
 | FL | JSTQB Foundation Level（全 6 章 30 レッスン・ドリル 186 問） | `sites/fl/` | 公開中。`FACTCHECK.md` の裏取りと横断的な品質改善を継続 |
-| AL-TA | JSTQB Advanced Level テストアナリスト（全 5 章 30 レッスン） | `sites/al-ta/` | 立ち上げ中（準備中） |
+| AL-TA | JSTQB Advanced Level テストアナリスト（全 5 章 30 レッスン・ドリル 180 問） | `sites/al-ta/` | 全レッスン・ドリル完成。`FACTCHECK.md` の裏取りと品質改善を継続 |
 
 - FL の現状・試験の前提は `sites/fl/CLAUDE.md`、AL-TA は `sites/al-ta/CLAUDE.md` を参照。
 - 新しいサイトを立ち上げる手順は `PLAYBOOK.md` を参照。
@@ -71,7 +71,7 @@ packages/
     vitepress/git-last-updated.mjs  最終更新日を git 履歴から取る処理
 sites/
   fl/                          Foundation Level 教材（公開中）
-  al-ta/                       Advanced Level テストアナリスト教材（立ち上げ中）
+  al-ta/                       Advanced Level テストアナリスト教材
 ```
 
 各サイト（`sites/<site>/`）の中身は次のとおり。

@@ -19,7 +19,7 @@ JSTQB（日本ソフトウェアテスト資格認定委員会）の資格の合
 | サイト | 対象資格 | ディレクトリ | 状態 |
 |---|---|---|---|
 | FL | JSTQB Foundation Level（全 6 章 30 レッスン・ドリル 186 問） | [`sites/fl/`](./sites/fl/) | 公開中 |
-| AL-TA | JSTQB Advanced Level テストアナリスト（全 5 章 30 レッスン） | [`sites/al-ta/`](./sites/al-ta/) | 準備中 |
+| AL-TA | JSTQB Advanced Level テストアナリスト（全 5 章 30 レッスン・ドリル 180 問） | [`sites/al-ta/`](./sites/al-ta/) | 公開準備完了 |
 
 各サイトの詳細は、サイトのディレクトリにある `README.md` と `CLAUDE.md` を参照してください。
 

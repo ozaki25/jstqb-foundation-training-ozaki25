@@ -2,14 +2,15 @@
 
 > 本教材は、JSTQB Advanced Level シラバス テストアナリスト（Version 4.0.J01）を参考に作成した**非公式・非公認**の学習コンテンツです。シラバスの著作権は International Software Testing Qualifications Board（ISTQB®）に、日本語翻訳版の著作権は Japan Software Testing Qualifications Board（JSTQB®）に帰属します（Translation Copyright © 2005-2026 JSTQB®, all rights reserved）。本教材は ISTQB®／JSTQB® が承認・公認したものではありません。正確な内容は必ず公式シラバス（<https://www.jstqb.jp/syllabus/>）をご確認ください。
 
-JSTQB Advanced Level テストアナリスト（CTAL-TA V4.0）の合格を目指す学習コンテンツです（立ち上げ中）。
+JSTQB Advanced Level テストアナリスト（CTAL-TA V4.0）の合格を目指す学習コンテンツです。
 
 全 5 章 30 レッスンで構成し、1 レッスンがシラバスの 1 項（学習目標）に対応します。このディレクトリは、リポジトリ全体（モノレポ）の 1 サイトです。リポジトリ全体の説明はルートの [`README.md`](../../README.md) を参照してください。
 
 ## 現状
 
-- 土台（サイト設定・ブランドカラー・ドリルのページ・出典表示）が完成しています
-- レッスン本文とドリルの問題は準備中です。各レッスンのページにはプレースホルダを置いています
+- 全 30 レッスン、ドリル 180 問（1 レッスン 5〜7 問。図表つきの問題を含む）、用語集（キーワード 67 個）が完成しています
+- 模擬試験（45 問）は ISTQB の出題表どおりの配分（章ごとに 8／3／22／4／8 問）で抽選します
+- 以降は `FACTCHECK.md` の裏取りと品質改善を続けます
 - 前提は Foundation Level の知識です。試験形式は ISTQB v4.0 の基準（45 問・78 点満点・合格 51 点・120 分）で、日本の V4.0 試験の正式な形式は未発表です。詳細は [`CLAUDE.md`](./CLAUDE.md) と [`FACTCHECK.md`](./FACTCHECK.md) を参照してください
 
 ## クイックスタート
