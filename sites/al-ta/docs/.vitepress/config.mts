@@ -9,7 +9,7 @@ import { gitLastUpdated } from "@jstqb/shared/vitepress/git-last-updated.mjs";
 import { chapterDefs, lessonId } from "./lessons.mts";
 
 const SITE_TITLE = "JSTQB Advanced Level テストアナリスト 学習コンテンツ";
-const BRAND_COLOR = "#0b6b63";
+const BRAND_COLOR = "#6d28d9";
 
 const lessonSidebar = chapterDefs.map((ch) => ({
   text: `第${ch.id}章 ${ch.title}`,
@@ -79,7 +79,7 @@ export default withPwa(
       mermaid: {
         theme: "default",
         themeVariables: {
-          primaryColor: "#e0f2ef",
+          primaryColor: "#ede9fe",
           primaryTextColor: "#1e293b",
           primaryBorderColor: BRAND_COLOR,
           lineColor: "#475569",
@@ -110,6 +110,9 @@ export default withPwa(
         // ナビゲーションバーに表示する短縮タイトル（<title>やSEOには上の title を使う）。
         // 長い正式名称のままだと狭い画面で検索・ハンバーガーが押し出され横スクロールが出る。
         siteTitle: "JSTQB AL-TA 学習コンテンツ",
+        // ナビゲーションにサイトのロゴを出し、FL（JSTQB）と AL-TA（TA）をひと目で見分けられるようにする。
+        // サイト名の文字が並ぶので、ロゴの alt は空にする（装飾扱い）。
+        logo: { src: "/logo.svg", alt: "" },
         nav: [
           { text: "ホーム", link: "/" },
           { text: "ドリル", link: "/quiz/" },

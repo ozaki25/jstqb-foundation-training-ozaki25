@@ -1,75 +1,77 @@
 /**
  * AL-TA サイトのブランドカラー上書き
- * Primary: 深いティール (#0b6b63)
- * FL サイトの青 (#0b5c9c) と見分けがつくよう、Advanced Level は落ち着いた深緑・ティール系にする。
+ * Primary: 深いバイオレット (#6d28d9)
+ * FL サイトの青 (#0b5c9c) とひと目で見分けがつくよう、Advanced Level は紫系にする。
+ * ドリルが意味のある色として使う緑（正解）・赤とオレンジ（不正解・むずかしい）・黄（ふつう）とも重ならない。
+ * 色だけに頼らないよう、ロゴは FL の「JSTQB」に対して大きな「TA」の文字で区別する。
  * 共通 CSS（packages/shared/theme/custom.css）は変更せず、同じ変数をここで上書きする。
  * すべてのテキスト色・ボタンは WCAG AA (4.5:1) 以上を満たす（比は相対輝度から算出）。
  *
  * コントラスト比（ライト: 白背景 #ffffff 対象）
- *   brand-1  #0b6b63: 6.37:1 ✅（本文リンク）
- *   brand-2  #095750: 8.43:1 ✅
- *   brand-3  #07423e: 11.30:1 ✅
- *   白文字 on #0b6b63: 6.37:1 ✅（ボタン）
- *   brand-1 on brand-soft（rgba(11,107,99,.12) を白 / #f6f6f7 / #f1f1f2 に重ねた色）:
- *     5.32:1 / 4.95:1 / 4.76:1 ✅
- *   tip ブロック（背景 #e0f2ef）: 文字 #07423e 9.75:1 ✅、brand-1 5.49:1 ✅
+ *   brand-1  #6d28d9: 7.10:1 ✅（本文リンク）
+ *   brand-2  #5b21b6: 8.98:1 ✅
+ *   brand-3  #4c1d95: 10.95:1 ✅
+ *   白文字 on #6d28d9: 7.10:1 ✅（ボタン）
+ *   brand-1 on brand-soft（rgba(109,40,217,.12) を白 / #f6f6f7 / #f1f1f2 に重ねた色）:
+ *     5.82:1 / 5.41:1 / 5.20:1 ✅
+ *   tip ブロック（背景 #f5f3ff）: 文字 #4c1d95 9.99:1 ✅、brand-1 6.48:1 ✅
  *
  * コントラスト比（ダーク: 背景 #1b1b1f 対象）
- *   brand-1  #5eead4: 11.61:1 ✅（本文リンク）
- *   brand-2  #99f6e4: 13.62:1 ✅
- *   brand-3  #ccfbf1: 15.24:1 ✅
- *   brand-1 on brand-soft（rgba(94,234,212,.16) を #1b1b1f に重ねた色）: 7.91:1 ✅
- *   tip ブロック（背景 rgba(11,107,99,.20)）: 文字 #ccfbf1 13.10:1 ✅
- *   ボタン: ライトと同じ白文字 on #0b6b63 6.37:1 ✅（共通 CSS はダークでもボタン色を上書きしない）
+ *   brand-1  #c4b5fd: 9.30:1 ✅（本文リンク）
+ *   brand-2  #ddd6fe: 12.36:1 ✅
+ *   brand-3  #ede9fe: 14.46:1 ✅
+ *   brand-1 on brand-soft（rgba(196,181,253,.16) を #1b1b1f に重ねた色）: 6.58:1 ✅
+ *   tip ブロック（背景 rgba(109,40,217,.20) → #2b1e44）: 文字 #ede9fe 12.89:1 ✅、brand-1 8.29:1 ✅
+ *   ボタン: ライトと同じ白文字 on #6d28d9 7.10:1 ✅（共通 CSS はダークでもボタン色を上書きしない）
  */
 
 :root {
-  --vp-c-brand-1: #0b6b63;
-  --vp-c-brand-2: #095750;
-  --vp-c-brand-3: #07423e;
-  --vp-c-brand-soft: rgba(11, 107, 99, 0.12);
+  --vp-c-brand-1: #6d28d9;
+  --vp-c-brand-2: #5b21b6;
+  --vp-c-brand-3: #4c1d95;
+  --vp-c-brand-soft: rgba(109, 40, 217, 0.12);
 
-  --vp-button-brand-bg: #0b6b63;
-  --vp-button-brand-hover-bg: #095750;
-  --vp-button-brand-active-bg: #07423e;
+  --vp-button-brand-bg: #6d28d9;
+  --vp-button-brand-hover-bg: #5b21b6;
+  --vp-button-brand-active-bg: #4c1d95;
 
-  --vp-custom-block-tip-text: #07423e;
-  --vp-custom-block-tip-bg: #e0f2ef;
-  --vp-custom-block-tip-code-bg: rgba(11, 107, 99, 0.14);
+  --vp-custom-block-tip-text: #4c1d95;
+  --vp-custom-block-tip-bg: #f5f3ff;
+  --vp-custom-block-tip-code-bg: rgba(109, 40, 217, 0.12);
 }
 
 .dark {
-  --vp-c-brand-1: #5eead4;
-  --vp-c-brand-2: #99f6e4;
-  --vp-c-brand-3: #ccfbf1;
-  --vp-c-brand-soft: rgba(94, 234, 212, 0.16);
+  --vp-c-brand-1: #c4b5fd;
+  --vp-c-brand-2: #ddd6fe;
+  --vp-c-brand-3: #ede9fe;
+  --vp-c-brand-soft: rgba(196, 181, 253, 0.16);
 
-  --vp-custom-block-tip-text: #ccfbf1;
-  --vp-custom-block-tip-bg: rgba(11, 107, 99, 0.2);
-  --vp-custom-block-tip-code-bg: rgba(11, 107, 99, 0.3);
+  --vp-custom-block-tip-text: #ede9fe;
+  --vp-custom-block-tip-bg: rgba(109, 40, 217, 0.2);
+  --vp-custom-block-tip-code-bg: rgba(109, 40, 217, 0.3);
 }
 
 /* ===========================================================================
- * ドリルのボタン色（packages/shared の変数を AL-TA のティールで上書き）
+ * ドリルのボタン色（packages/shared の変数を AL-TA のバイオレットで上書き）
  * 白文字とのコントラスト比:
- *   ライト: 一覧のボタン #0b6b63 6.37:1（hover #095750 8.43:1）
- *           次へ・もう一度 #07423e 11.30:1（hover #095750 8.43:1）
- *   ダーク: #0f766e 5.47:1（hover #115e59 7.58:1）
- * フォーカス枠: ライト #0b6b63（白背景に 6.37:1）、ダーク #5eead4（背景 #1b1b1f に 11.61:1）
+ *   ライト: 一覧のボタン #6d28d9 7.10:1（hover #5b21b6 8.98:1）
+ *           次へ・もう一度 #4c1d95 10.95:1（hover #5b21b6 8.98:1）
+ *   ダーク: #6d28d9 7.10:1（hover #5b21b6 8.98:1）
+ * フォーカス枠: ライト #6d28d9（白背景に 7.10:1）、ダーク #c4b5fd（背景 #1b1b1f に 9.30:1）
  * =========================================================================== */
 :root {
-  --quiz-action-bg: #0b6b63;
-  --quiz-action-hover-bg: #095750;
-  --quiz-action-focus: #0b6b63;
-  --quiz-next-bg: #07423e;
-  --quiz-next-hover-bg: #095750;
-  --quiz-next-focus: #0b6b63;
+  --quiz-action-bg: #6d28d9;
+  --quiz-action-hover-bg: #5b21b6;
+  --quiz-action-focus: #6d28d9;
+  --quiz-next-bg: #4c1d95;
+  --quiz-next-hover-bg: #5b21b6;
+  --quiz-next-focus: #6d28d9;
 }
 .dark {
-  --quiz-action-bg: #0f766e;
-  --quiz-action-hover-bg: #115e59;
-  --quiz-action-focus: #5eead4;
-  --quiz-next-bg: #0f766e;
-  --quiz-next-hover-bg: #115e59;
-  --quiz-next-focus: #5eead4;
+  --quiz-action-bg: #6d28d9;
+  --quiz-action-hover-bg: #5b21b6;
+  --quiz-action-focus: #c4b5fd;
+  --quiz-next-bg: #6d28d9;
+  --quiz-next-hover-bg: #5b21b6;
+  --quiz-next-focus: #c4b5fd;
 }

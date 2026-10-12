@@ -92,6 +92,9 @@ export default withPwa(
         // ナビゲーションバーに表示する短縮タイトル（<title>やSEOには上の title を使う）。
         // 長い正式名称のままだと狭い画面で検索・ハンバーガーが押し出され横スクロールが出る。
         siteTitle: "JSTQB FL 学習コンテンツ",
+        // ナビゲーションにサイトのロゴを出し、FL（JSTQB）と AL-TA（TA）をひと目で見分けられるようにする。
+        // サイト名の文字が並ぶので、ロゴの alt は空にする（装飾扱い）。
+        logo: { src: "/logo.svg", alt: "" },
         nav: [
           { text: "ホーム", link: "/" },
           { text: "ドリル", link: "/quiz/" },

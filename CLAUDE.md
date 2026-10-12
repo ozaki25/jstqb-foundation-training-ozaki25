@@ -205,6 +205,11 @@ sites/<site>/
 - Vercel はサイトごとにプロジェクトを分ける。FL の既存プロジェクトはルートの `vercel.json`（Root Directory を変えずに `sites/fl` をビルド）を使う。新しいサイトのプロジェクトは Root Directory を `sites/<site>` にして作る。
 - Root Directory を `sites/<site>` にしたプロジェクトでは、`sites/<site>/vercel.json` の `installCommand`（`cd ../.. && npm ci`）でリポジトリのルートから依存関係を入れる。サイトのディレクトリで `npm install` すると、そのサイト自身の依存（`@jstqb/shared`）しか入らず、ルートの devDependencies にある VitePress が見つからずにビルドが失敗するため。
 
+## サイトの見分け方（見た目）
+
+- サイトごとにブランドカラーを変える（FL は青、AL-TA は紫）。新しいサイトは、既存サイトの色と、ドリルが使う意味のある色（緑＝正解、赤・オレンジ＝不正解・むずかしい、黄＝ふつう）のどちらとも重ならない色相を選ぶ。テキストとボタンの色はライト・ダークとも 4.5:1 以上を保ち、比をサイトの CSS の冒頭に記録する。
+- 色だけに頼らないよう、ロゴは文字で区別する（FL「JSTQB」、AL-TA「TA」）。ナビゲーションにはロゴを出し（`themeConfig.logo`）、上端にブランド色の帯を出す（共通 CSS）。
+
 ## Markdown の太字（強調）について
 
 日本語では `**強調**` の閉じ `**` の直前が全角閉じ括弧（`）」】〉》`）だと、素の markdown-it では強調が描画されない（CJK flanking 問題）。このプロジェクトは `markdown-it-cjk-friendly` を導入して解消済みのため、本文では `**用語（よみ）**` のような書き方をしてもよい。ただし**ドリル（quiz）では `**` を使わない**。

@@ -55,7 +55,7 @@ docs/
     config.mts                 サイト設定（nav・サイドバー・PWA・SEO）
     lessons.mts                章・レッスンの定義（サイドバーの元データ）
     theme/index.ts             共通テーマ（packages/shared/theme）の読み込み
-    theme/al-ta.css            ブランドカラー（深いティール）の上書き
+    theme/al-ta.css            ブランドカラー（深いバイオレット）の上書き
 FACTCHECK.md                   事実確認の台帳
 SPRINTLOG.md                   開発の経緯
 ```
