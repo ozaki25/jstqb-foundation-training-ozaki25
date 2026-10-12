@@ -140,8 +140,10 @@ sites/<site>/
 - 一次参考資料として、各資格のシラバスの PDF とテキスト抽出版をローカルの `references/` に置く。FL は `references/` 直下（索引は `references/INDEX.md`）、AL-TA は `references/al-ta/`。新サイトは `references/<site>/` に置く。
 - **非公開扱いのため `references/` は git 管理外（.gitignore 済み）。絶対にコミット・プッシュしない。**
 - シラバスの内容（図・文章・構成）をそのまま転載しない。事実・概念を理解した上で書き直す。
-- リモート実行環境ではセッションごとにファイルが消えるため、消えていたら再アップロードしてもらう。
-- この環境は jstqb.jp・istqb.org などへのアクセスが遮断されるため、一次資料は自分で取得せず、ユーザーにアップロードしてもらう（手順は `PLAYBOOK.md` の Phase 1）。
+- **資料の保管場所は非公開の Artifact「JSTQB 一次資料庫」**（https://claude.ai/artifact/RgFeC733b5AH9sayZfbdjs ）。リモート実行環境はリセットのたびにファイルが消えるため、PDF をこの Artifact の asset に保管している。ページの表に「資料・版・取り出し先・asset id」の対応がある。
+  - **作業を始めるとき `references/` が空なら、ユーザーに再アップロードを頼まず、ここから取り出す**: Artifact ツールの `action: "read"` に `url` とページの表の asset id（`path`）を渡すとファイルが保存されるので、表の「取り出し先」へコピーする。テキスト版は `pdftotext -layout <PDF> <同じ名前.txt>` で作り直す（AL-TA の用語集は `references/al-ta/g.txt`（日本語版）・`ge.txt`（英語版）の名前で使う）。
+  - 新しい資料を受け取ったら、`references/` に置くのと同時にこの Artifact に asset としてアップロードし（`asset: true` と `file_paths`）、ページの表に行を足して再公開する。
+- この環境は jstqb.jp・istqb.org などへのアクセスが遮断されるため、一次資料は自分で取得せず、ユーザーにアップロードしてもらう（手順は `PLAYBOOK.md` の Phase 1）。アップロードしてもらうのは、資料庫にまだない資料だけ。
 
 ## ドリル（quiz）
 
