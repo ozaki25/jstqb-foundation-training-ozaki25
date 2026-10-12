@@ -38,5 +38,5 @@
   - はみ出す Mermaid 図の端に影を出し、横にスクロールできることを示す。
   - ダークモードで Mermaid の線・矢印・subgraph が背景に溶ける問題を修正。
   - レッスンの図を縦向き・ラベルの折り返し・間隔の調整でスマホ幅に近づけた。375px でライト・ダークの全ページを撮影して確認。
-- **Vercel**: AL-TA 用のプロジェクトを作成してもらった。Root Directory を `sites/al-ta` にする設定を案内した。
+- **Vercel**: AL-TA 用のプロジェクトを作成してもらい、Root Directory を `sites/al-ta` に設定してもらった。サイトのディレクトリでの `npm install` ではルートの VitePress が入らずデプロイが失敗したため、`sites/<site>/vercel.json` に `installCommand`（`cd ../.. && npm ci`）を追加して解消。FL・AL-TA とも本番デプロイの成功を確認し、main に反映した。
 
